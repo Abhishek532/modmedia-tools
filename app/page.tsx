@@ -258,10 +258,24 @@ export default function Home() {
       ffmpeg.on('progress', onProgress);
 
       if (!ffmpeg.loaded) {
-        await ffmpeg.load({
-          coreURL: '/ffmpeg/ffmpeg-core.js',
-          wasmURL: '/ffmpeg/ffmpeg-core.wasm',
-        });
+        const chunkUrls = [
+          '/ffmpeg/ffmpeg-core.wasm.partaa',
+          '/ffmpeg/ffmpeg-core.wasm.partab',
+        ];
+        const chunkResponses = await Promise.all(chunkUrls.map((url) => fetch(url)));
+        if (chunkResponses.some((response) => !response.ok)) {
+          throw new Error('The audio engine could not be downloaded.');
+        }
+        const wasmParts = await Promise.all(chunkResponses.map((response) => response.arrayBuffer()));
+        const wasmUrl = URL.createObjectURL(new Blob(wasmParts, { type: 'application/wasm' }));
+        try {
+          await ffmpeg.load({
+            coreURL: '/ffmpeg/ffmpeg-core.js',
+            wasmURL: wasmUrl,
+          });
+        } finally {
+          URL.revokeObjectURL(wasmUrl);
+        }
       }
 
       setProgress(28);
