@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://soundslice-discord.warm-okapi-4710.chatgpt.site'),
   title: 'SoundSlice — Discord Soundboard Clip Maker',
-  description: 'Trim MP4 videos into Discord-ready MP3 soundboard clips without uploading your files.',
+  description: 'Trim MP4 videos or MP3 audio into Discord-ready soundboard clips without uploading your files.',
   openGraph: {
     title: 'SoundSlice — Discord Soundboard Clip Maker',
     description: 'Cut the moment. Keep the chaos. Create Discord-ready MP3 clips locally in your browser.',

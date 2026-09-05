@@ -45,7 +45,7 @@ function formatBytes(bytes: number) {
 function safeName(name: string) {
   return (
     name
-      .replace(/\.mp4$/i, '')
+      .replace(/\.(mp4|mp3)$/i, '')
       .trim()
       .replace(/[^a-zA-Z0-9-_ ]/g, '')
       .replace(/\s+/g, '-')
@@ -75,6 +75,7 @@ export default function Home() {
   const regionRef = useRef<Region | null>(null);
   const ffmpegRef = useRef<import('@ffmpeg/ffmpeg').FFmpeg | null>(null);
   const selectionRef = useRef(selection);
+  const isAudioFile = file?.name.toLowerCase().endsWith('.mp3') || file?.type === 'audio/mpeg';
 
   const resetOutput = useCallback(() => {
     setStage('idle');
@@ -151,7 +152,7 @@ export default function Home() {
       }
     });
     wavesurfer.on('error', () => {
-      setError('This video could not be decoded in your browser. Try a standard H.264 MP4.');
+      setError('This file could not be decoded in your browser. Try a standard MP3 or H.264 MP4.');
     });
 
     return () => {
@@ -167,12 +168,15 @@ export default function Home() {
       resetOutput();
       setError('');
 
-      if (!nextFile.name.toLowerCase().endsWith('.mp4') && nextFile.type !== 'video/mp4') {
-        setError('Please choose an MP4 video.');
+      const lowerName = nextFile.name.toLowerCase();
+      const isMp4 = lowerName.endsWith('.mp4') || nextFile.type === 'video/mp4';
+      const isMp3 = lowerName.endsWith('.mp3') || nextFile.type === 'audio/mpeg';
+      if (!isMp4 && !isMp3) {
+        setError('Please choose an MP4 video or MP3 audio file.');
         return;
       }
       if (nextFile.size > MAX_FILE_BYTES) {
-        setError('That video is larger than 250 MB. Choose a smaller MP4.');
+        setError('That file is larger than 250 MB. Choose a smaller MP4 or MP3.');
         return;
       }
 
@@ -280,7 +284,8 @@ export default function Home() {
 
       setProgress(28);
       setStage('converting');
-      await ffmpeg.writeFile('input.mp4', await fetchFile(file));
+      const inputName = isAudioFile ? 'input.mp3' : 'input.mp4';
+      await ffmpeg.writeFile(inputName, await fetchFile(file));
       setProgress(42);
 
       const clipDuration = Math.min(MAX_CLIP_SECONDS, selection.end - selection.start);
@@ -300,7 +305,7 @@ export default function Home() {
         '-t',
         clipDuration.toFixed(3),
         '-i',
-        'input.mp4',
+        inputName,
         '-map',
         '0:a:0',
         '-vn',
@@ -333,7 +338,7 @@ export default function Home() {
       setStage('done');
 
       await Promise.allSettled([
-        ffmpeg.deleteFile('input.mp4'),
+        ffmpeg.deleteFile(inputName),
         ffmpeg.deleteFile('output.mp3'),
       ]);
     } catch (caught) {
@@ -341,7 +346,7 @@ export default function Home() {
       setError(
         message.includes('0:a:0')
           ? 'No audio track was found in this video.'
-          : `${message} Try another MP4 or a shorter source video.`,
+          : `${message} Try another MP4 or MP3, or choose a shorter source file.`,
       );
       setStage('error');
       setProgress(0);
@@ -383,7 +388,7 @@ export default function Home() {
               <span className="text-[#8e9aff]">Keep the chaos.</span>
             </h1>
             <p className="mt-6 max-w-lg text-base leading-7 text-muted-foreground sm:text-lg">
-              Turn any MP4 into a clean, Discord-ready MP3. Pick the exact moment, preview it, and download—no uploads to a server.
+              Turn any MP4 or MP3 into a clean, Discord-ready sound. Pick the exact moment, preview it, and download—no uploads to a server.
             </p>
             <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm text-[#afb5cc]">
               <span className="flex items-center gap-2"><span className="text-[#7cffb2]">✓</span> Max 5 seconds</span>
@@ -415,7 +420,7 @@ export default function Home() {
                 <input
                   className="sr-only"
                   type="file"
-                  accept="video/mp4,.mp4"
+                  accept="video/mp4,audio/mpeg,.mp4,.mp3"
                   onChange={(event) => {
                     acceptFile(event.target.files?.[0]);
                     event.target.value = '';
@@ -427,10 +432,10 @@ export default function Home() {
                     <UploadCloud className="size-4" />
                   </span>
                 </span>
-                <h2 className="text-xl font-bold tracking-tight">{isDragging ? 'Drop it here' : 'Drop your MP4 here'}</h2>
-                <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">or click to choose a video from your device</p>
-                <span className="mt-7 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white shadow-[0_10px_30px_rgba(88,101,242,.28)]">Choose video</span>
-                <p className="mt-5 text-xs text-[#747b94]">MP4 only · up to 250 MB</p>
+                <h2 className="text-xl font-bold tracking-tight">{isDragging ? 'Drop it here' : 'Drop your MP4 or MP3 here'}</h2>
+                <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">or click to choose a file from your device</p>
+                <span className="mt-7 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white shadow-[0_10px_30px_rgba(88,101,242,.28)]">Choose file</span>
+                <p className="mt-5 text-xs text-[#747b94]">MP4 or MP3 · up to 250 MB</p>
               </label>
             </div>
           </div>
@@ -455,17 +460,17 @@ export default function Home() {
           <div className="grid gap-5 lg:grid-cols-[1.3fr_.7fr]">
             <div className="space-y-5">
               <section className="overflow-hidden rounded-3xl border border-white/10 bg-[#11162c] shadow-2xl">
-                <div className="relative aspect-video bg-black">
+                <div className={`relative aspect-video ${isAudioFile ? 'bg-[radial-gradient(circle_at_50%_40%,rgba(88,101,242,.3),transparent_55%),#090c19]' : 'bg-black'}`}>
                   <video
                     ref={videoRef}
                     src={fileUrl}
-                    className="size-full object-contain"
+                    className={isAudioFile ? 'sr-only' : 'size-full object-contain'}
                     playsInline
                     preload="metadata"
                     onLoadedMetadata={(event) => {
                       const nextDuration = event.currentTarget.duration;
                       if (!Number.isFinite(nextDuration) || nextDuration < 0.1) {
-                        setError('This video has an invalid duration.');
+                        setError('This file has an invalid duration.');
                         return;
                       }
                       setDuration(nextDuration);
@@ -474,6 +479,13 @@ export default function Home() {
                   >
                     <track kind="captions" srcLang="en" label="User-provided video" />
                   </video>
+                  {isAudioFile && (
+                    <div className="absolute inset-0 grid place-items-center" aria-hidden="true">
+                      <span className="grid size-28 place-items-center rounded-full border border-primary/25 bg-primary/15 text-[#aeb5ff] shadow-[0_0_70px_rgba(88,101,242,.35)]">
+                        <Music2 className="size-12" />
+                      </span>
+                    </div>
+                  )}
                   <button
                     type="button"
                     aria-label={isPlaying ? 'Pause selected clip' : 'Play selected clip'}
@@ -653,7 +665,7 @@ export default function Home() {
               </section>
 
               <div className="flex items-center justify-center gap-2 text-center text-xs text-[#747b94]">
-                <LockKeyhole className="size-3.5" /> Your video never leaves this browser
+                <LockKeyhole className="size-3.5" /> Your file never leaves this browser
               </div>
             </aside>
           </div>
