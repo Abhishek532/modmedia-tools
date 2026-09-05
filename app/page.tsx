@@ -27,6 +27,15 @@ const MAX_FILE_BYTES = 250 * 1024 * 1024;
 const MAX_CLIP_SECONDS = 5;
 const MAX_OUTPUT_BYTES = 512 * 1024;
 
+const DESIGNS = [
+  { id: 'void', name: 'Neon Void', note: 'Clean neon', swatch: '#8b7cff' },
+  { id: 'carbon', name: 'Carbon Ops', note: 'Tactical mono', swatch: '#ff9d4d' },
+  { id: 'pulse', name: 'Pulse Grid', note: 'Cyber arcade', swatch: '#ff4fd8' },
+  { id: 'cryo', name: 'Cryo Arena', note: 'Frosted competitive', swatch: '#38d9ff' },
+] as const;
+
+type DesignId = (typeof DESIGNS)[number]['id'];
+
 type Stage = 'idle' | 'loading' | 'converting' | 'done' | 'error';
 
 function formatTime(seconds: number) {
@@ -54,6 +63,7 @@ function safeName(name: string) {
 }
 
 export default function Home() {
+  const [design, setDesign] = useState<DesignId>('void');
   const [file, setFile] = useState<File | null>(null);
   const [fileUrl, setFileUrl] = useState('');
   const [duration, setDuration] = useState(0);
@@ -359,10 +369,10 @@ export default function Home() {
   const isBusy = stage === 'loading' || stage === 'converting';
 
   return (
-    <main className="min-h-screen overflow-hidden bg-background text-foreground">
+    <main className="sound-design min-h-screen overflow-hidden bg-background text-foreground" data-design={design}>
       <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-5 sm:px-8">
         <button className="flex items-center gap-3 text-left" onClick={clearFile} type="button">
-          <span className="grid size-10 place-items-center rounded-xl bg-primary text-primary-foreground shadow-[0_0_32px_rgba(88,101,242,.35)]">
+          <span className="brand-mark grid size-10 place-items-center rounded-xl bg-primary text-primary-foreground shadow-[0_0_32px_rgba(88,101,242,.35)]">
             <Music2 className="size-5" strokeWidth={2.4} />
           </span>
           <span>
@@ -370,22 +380,41 @@ export default function Home() {
             <span className="block text-[10px] font-semibold uppercase tracking-[0.17em] text-muted-foreground">Discord clip maker</span>
           </span>
         </button>
-        <span className="hidden items-center gap-2 rounded-full border border-white/8 bg-white/[.035] px-3 py-1.5 text-xs text-muted-foreground sm:flex">
+        <span className="privacy-pill hidden items-center gap-2 rounded-full border border-white/8 bg-white/[.035] px-3 py-1.5 text-xs text-muted-foreground sm:flex">
           <LockKeyhole className="size-3.5 text-emerald-400" />
           Files stay on your device
         </span>
       </header>
 
+      <nav className="design-switcher mx-auto flex w-full max-w-7xl gap-2 overflow-x-auto px-5 pb-2 sm:px-8" aria-label="Choose a design direction">
+        {DESIGNS.map((option, index) => (
+          <button
+            key={option.id}
+            type="button"
+            aria-pressed={design === option.id}
+            onClick={() => setDesign(option.id)}
+            className="design-option flex min-w-fit items-center gap-2.5 rounded-xl border px-3 py-2 text-left transition"
+          >
+            <span className="design-number text-[10px] font-bold tabular-nums">0{index + 1}</span>
+            <span className="size-2 rounded-full" style={{ backgroundColor: option.swatch }} />
+            <span>
+              <span className="block text-xs font-bold">{option.name}</span>
+              <span className="block text-[9px] uppercase tracking-[.12em] text-muted-foreground">{option.note}</span>
+            </span>
+          </button>
+        ))}
+      </nav>
+
       {!file ? (
-        <section className="mx-auto grid w-full max-w-7xl gap-10 px-5 pb-16 pt-8 sm:px-8 lg:grid-cols-[.78fr_1.22fr] lg:items-center lg:gap-16 lg:pt-16">
+        <section className="landing-grid mx-auto grid w-full max-w-7xl gap-10 px-5 pb-16 pt-8 sm:px-8 lg:grid-cols-[.78fr_1.22fr] lg:items-center lg:gap-16 lg:pt-16">
           <div className="max-w-xl">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1.5 text-xs font-semibold text-[#aeb5ff]">
+            <div className="hero-badge mb-5 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1.5 text-xs font-semibold text-[#aeb5ff]">
               <span className="size-1.5 rounded-full bg-[#7cffb2] shadow-[0_0_10px_#7cffb2]" />
               Built for Discord’s 5-second limit
             </div>
             <h1 className="text-balance text-5xl font-black leading-[.94] tracking-[-0.055em] sm:text-6xl lg:text-7xl">
               Cut the moment.<br />
-              <span className="text-[#8e9aff]">Keep the chaos.</span>
+              <span className="hero-accent text-[#8e9aff]">Keep the chaos.</span>
             </h1>
             <p className="mt-6 max-w-lg text-base leading-7 text-muted-foreground sm:text-lg">
               Turn any MP4 or MP3 into a clean, Discord-ready sound. Pick the exact moment, preview it, and download—no uploads to a server.
@@ -415,8 +444,8 @@ export default function Home() {
             }}
           >
             <div className="pointer-events-none absolute -inset-20 -z-0 rounded-full bg-primary/15 blur-3xl" />
-            <div className="relative rounded-[28px] border border-white/10 bg-[#11162c]/90 p-3 shadow-[0_30px_100px_rgba(0,0,0,.4)] backdrop-blur sm:p-4">
-              <label className={`group flex min-h-[390px] cursor-pointer flex-col items-center justify-center rounded-[20px] border border-dashed px-6 text-center transition ${isDragging ? 'border-primary bg-primary/10' : 'border-white/15 bg-[radial-gradient(circle_at_50%_0%,rgba(88,101,242,.16),transparent_48%)] hover:border-primary/70 hover:bg-primary/[.045]'}`}>
+            <div className="upload-shell game-panel relative rounded-[28px] border border-white/10 bg-[#11162c]/90 p-3 shadow-[0_30px_100px_rgba(0,0,0,.4)] backdrop-blur sm:p-4">
+              <label className={`upload-zone group flex min-h-[390px] cursor-pointer flex-col items-center justify-center rounded-[20px] border border-dashed px-6 text-center transition ${isDragging ? 'border-primary bg-primary/10' : 'border-white/15 bg-[radial-gradient(circle_at_50%_0%,rgba(88,101,242,.16),transparent_48%)] hover:border-primary/70 hover:bg-primary/[.045]'}`}>
                 <input
                   className="sr-only"
                   type="file"
@@ -426,7 +455,7 @@ export default function Home() {
                     event.target.value = '';
                   }}
                 />
-                <span className="relative mb-6 grid size-20 place-items-center rounded-2xl border border-white/10 bg-white/[.055] text-[#9ca6ff] shadow-xl transition group-hover:-translate-y-1 group-hover:scale-105">
+                <span className="upload-icon relative mb-6 grid size-20 place-items-center rounded-2xl border border-white/10 bg-white/[.055] text-[#9ca6ff] shadow-xl transition group-hover:-translate-y-1 group-hover:scale-105">
                   <FileVideo className="size-9" />
                   <span className="absolute -bottom-2 -right-2 grid size-8 place-items-center rounded-full bg-primary text-white ring-4 ring-[#11162c]">
                     <UploadCloud className="size-4" />
@@ -457,9 +486,9 @@ export default function Home() {
             </Button>
           </div>
 
-          <div className="grid gap-5 lg:grid-cols-[1.3fr_.7fr]">
-            <div className="space-y-5">
-              <section className="overflow-hidden rounded-3xl border border-white/10 bg-[#11162c] shadow-2xl">
+          <div className="workspace-grid grid gap-5 lg:grid-cols-[1.3fr_.7fr]">
+            <div className="editor-column space-y-5">
+              <section className="game-panel overflow-hidden rounded-3xl border border-white/10 bg-[#11162c] shadow-2xl">
                 <div className={`relative aspect-video ${isAudioFile ? 'bg-[radial-gradient(circle_at_50%_40%,rgba(88,101,242,.3),transparent_55%),#090c19]' : 'bg-black'}`}>
                   <video
                     ref={videoRef}
@@ -507,7 +536,7 @@ export default function Home() {
                     </span>
                   </div>
 
-                  <div className="rounded-2xl border border-white/8 bg-[#0b0f20] p-4">
+                  <div className="game-subpanel rounded-2xl border border-white/8 bg-[#0b0f20] p-4">
                     {!duration && <div className="h-[88px] animate-pulse rounded-xl bg-white/5" />}
                     <div ref={waveformRef} className={duration ? 'block' : 'hidden'} aria-label="Audio waveform with draggable trim handles" />
                     <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -523,7 +552,7 @@ export default function Home() {
                 </div>
               </section>
 
-              <section className="grid gap-3 rounded-2xl border border-white/10 bg-[#11162c] p-4 sm:grid-cols-2 sm:p-5">
+              <section className="game-panel grid gap-3 rounded-2xl border border-white/10 bg-[#11162c] p-4 sm:grid-cols-2 sm:p-5">
                 <label className="block" htmlFor="clip-start">
                   <span className="mb-2 block text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">Starts at</span>
                   <div className="relative">
@@ -559,8 +588,8 @@ export default function Home() {
               </section>
             </div>
 
-            <aside className="space-y-5">
-              <section className="rounded-3xl border border-white/10 bg-[#11162c] p-5 shadow-xl sm:p-6">
+            <aside className="finish-column space-y-5">
+              <section className="game-panel rounded-3xl border border-white/10 bg-[#11162c] p-5 shadow-xl sm:p-6">
                 <div className="flex items-center gap-3">
                   <span className="grid size-10 place-items-center rounded-xl bg-primary/15 text-[#9ca6ff]"><WandSparkles className="size-5" /></span>
                   <div>
@@ -583,7 +612,7 @@ export default function Home() {
                   </div>
                 </label>
 
-                <div className="mt-5 divide-y divide-white/8 rounded-2xl border border-white/8 bg-[#0b0f20] px-4">
+                <div className="game-subpanel mt-5 divide-y divide-white/8 rounded-2xl border border-white/8 bg-[#0b0f20] px-4">
                   <div className="flex items-center justify-between gap-4 py-4">
                     <span id="normalize-label">
                       <span className="flex items-center gap-2 text-sm font-bold"><Sparkles className="size-4 text-[#8e9aff]" /> Normalize volume</span>
