@@ -339,7 +339,7 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-wave-skeleton { min-height: 6.75rem; }
 .arcade-waveform ::part(region) { background: rgba(250, 99, 119, .18) !important; cursor: grab !important; }
 .arcade-waveform ::part(region):active { cursor: grabbing !important; }
-.arcade-waveform ::part(cursor) { width: 4px !important; background: #ffe4e9 !important; box-shadow: 0 0 0 1px #20131b, 0 0 12px rgba(255, 228, 233, .7); }
+.arcade-waveform ::part(cursor) { z-index: 6 !important; width: 4px !important; background: #ffe4e9 !important; box-shadow: 0 0 0 1px #20131b, 0 0 12px rgba(255, 228, 233, .7); }
 .arcade-waveform ::part(region-handle) { width: 8px !important; background: #fa6377; box-shadow: 0 0 0 1px #20131b, 0 0 13px rgba(250, 99, 119, .55); }
 .arcade-waveform ::part(region-handle-left) { border-left: 2px solid #ffe4e9 !important; border-radius: 3px 0 0 3px !important; }
 .arcade-waveform ::part(region-handle-right) { border-right: 2px solid #ffe4e9 !important; border-radius: 0 3px 3px 0 !important; }

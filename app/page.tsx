@@ -158,6 +158,14 @@ export default function Home() {
       }
       resetOutput();
     });
+    regions.on('region-clicked', (_region, event) => {
+      // The selected range overlays the waveform. Let a click on that overlay
+      // seek just like a click on the uncovered waveform, without affecting
+      // range dragging (which only starts after the drag threshold).
+      const bounds = wavesurfer.getWrapper().getBoundingClientRect();
+      const progress = Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width));
+      wavesurfer.setTime(progress * wavesurfer.getDuration());
+    });
     wavesurfer.on('play', () => setIsPlaying(true));
     wavesurfer.on('pause', () => setIsPlaying(false));
     wavesurfer.on('finish', () => setIsPlaying(false));
@@ -417,7 +425,7 @@ export default function Home() {
                 {!duration && <div className="arcade-wave-skeleton" />}
                 <div ref={waveformRef} className={duration ? 'arcade-waveform' : 'hidden'} aria-label="Audio waveform. Click or drag to seek with the playback cursor; drag the two coral edge handles to set the clip start and end." />
                 <div className="arcade-ruler" aria-hidden="true"><span>{formatTime(0)}</span><span>{formatTime(duration / 2)}</span><span>{formatTime(duration)}</span></div>
-                <p className="arcade-timeline-help"><span aria-hidden="true" />Drag the red range to reposition it, its coral handles to trim, or the waveform to move the playback cursor.</p>
+                <p className="arcade-timeline-help"><span aria-hidden="true" />Click anywhere to seek. Drag the red range to reposition it, or its coral handles to trim.</p>
                 <div className="arcade-trim-controls">
                   <Button className="arcade-preview-button" onClick={togglePreview} disabled={!duration}>{isPlaying ? <Pause /> : <Play />} {isPlaying ? 'Pause preview' : 'Preview selection'}</Button>
                   <div className="arcade-time-fields">
