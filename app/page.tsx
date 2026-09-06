@@ -112,7 +112,7 @@ export default function Home() {
       waveColor: '#71667c',
       progressColor: '#fa6377',
       cursorColor: '#ffe4e9',
-      cursorWidth: 2,
+      cursorWidth: 4,
       barWidth: 3,
       barGap: 3,
       barRadius: 2,
@@ -139,8 +139,23 @@ export default function Home() {
       regionRef.current = region;
       setSelection({ start: 0, end });
     });
-    regions.on('region-update', (region) => {
-      setSelection({ start: region.start, end: region.end });
+    regions.on('region-update', (region, side) => {
+      // WaveSurfer clamps a region's leading/trailing edge independently when a
+      // dragged range hits the timeline boundary. Restore the user-selected
+      // duration and clamp the whole range instead, so it never shrinks.
+      if (!side) {
+        const previous = selectionRef.current;
+        const clipLength = previous.end - previous.start;
+        const start = Math.max(0, Math.min(region.start, duration - clipLength));
+        const next = { start, end: start + clipLength };
+        region.setOptions(next);
+        selectionRef.current = next;
+        setSelection(next);
+      } else {
+        const next = { start: region.start, end: region.end };
+        selectionRef.current = next;
+        setSelection(next);
+      }
       resetOutput();
     });
     wavesurfer.on('play', () => setIsPlaying(true));
