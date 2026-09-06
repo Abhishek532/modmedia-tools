@@ -318,7 +318,6 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-file-details b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .94rem; }
 .arcade-file-details small { display: block; margin-top: .2rem; color: #b7aebf; font-size: .75rem; }
 .arcade-replace { padding: .52rem .72rem; cursor: pointer; border: 1px solid #704150; border-radius: .35rem; font-size: .75rem; }
-.arcade-replace-primary { min-height: 2.5rem; align-content: center; flex: none; color: #ffd9df; }
 
 .arcade-workspace { display: grid; grid-template-columns: minmax(12rem, .65fr) minmax(0, 1.35fr); gap: 1.25rem; padding: 1.25rem; }
 .arcade-workspace.is-audio { display: block; }
@@ -331,10 +330,12 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-timeline { min-width: 0; }
 .arcade-timeline-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
 .arcade-timeline-heading h2 { margin: 0; font-size: .94rem; font-weight: 700; }
-.arcade-timeline-heading > span { display: flex; align-items: center; gap: .6rem; font-family: var(--font-geist-mono), monospace; }
+.arcade-timeline-heading > span { display: flex; align-items: baseline; gap: .42rem; font-family: var(--font-geist-mono), monospace; }
 .arcade-selected-duration { color: #c8c0cf; font-size: .72rem; }
 .arcade-selected-duration b { color: #fa8b9a; font-size: .88rem; }
-.arcade-timeline-heading em { padding: .28rem .5rem; color: #ffe4e9; background: #59303c; border: 1px solid #a94759; border-radius: .3rem; font-size: .86rem; font-style: normal; font-weight: 700; letter-spacing: .01em; }
+.arcade-timeline-heading i { color: #83798b; font-size: .78rem; font-style: normal; }
+.arcade-timeline-heading em { color: #ffe4e9; font-size: .94rem; font-style: normal; font-weight: 700; letter-spacing: .01em; }
+.arcade-timeline-heading em b { font-size: 1.12rem; }
 .arcade-waveform-shell, .arcade-wave-skeleton { margin-top: 1rem; overflow: hidden; background: #19171f; border-radius: .45rem; }
 .arcade-waveform-shell { position: relative; height: 108px; touch-action: none; cursor: default; }
 .arcade-waveform { position: absolute; inset: 0; height: 108px; pointer-events: none; }
@@ -350,8 +351,7 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-wave-skeleton { animation: arcade-pulse 1.4s ease-in-out infinite; }
 @keyframes arcade-pulse { 50% { opacity: .55; } }
 .arcade-ruler { display: flex; justify-content: space-between; padding: .55rem 0 1.1rem; color: #b7aebf; font-family: var(--font-geist-mono), monospace; font-size: .72rem; }
-.arcade-timeline-help { display: flex; align-items: center; gap: .5rem; margin: -0.35rem 0 1rem; color: #b7aebf; font-size: .77rem; line-height: 1.4; }
-.arcade-timeline-help span { display: inline-block; width: .6rem; height: .6rem; flex: 0 0 auto; background: #fa6377; border: 2px solid #ffe4e9; border-radius: 2px; box-shadow: 0 0 8px rgba(250, 99, 119, .55); }
+.arcade-timeline-help { margin: -0.35rem 0 1rem; color: #b7aebf; font-size: .77rem; line-height: 1.4; }
 .arcade-trim-controls { justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
 .arcade-preview-button { min-height: 2.75rem; color: #ffb3be; background: #33252f; border: 1px solid #704150; }
 .arcade-preview-button svg { width: 1rem; }

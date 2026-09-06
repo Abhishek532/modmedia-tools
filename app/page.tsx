@@ -400,12 +400,12 @@ export default function Home() {
         <section className="arcade-editor-page">
           <div className="arcade-editor-intro">
             <div><p className="arcade-eyebrow">Soundboard clip maker</p><h1>Your next soundboard hit.</h1><p>Find the moment. Keep the reaction.</p></div>
-            <label className="arcade-replace arcade-replace-primary">Replace file<input className="sr-only" type="file" accept="video/mp4,audio/mpeg,.mp4,.mp3" onChange={(event) => { acceptFile(event.target.files?.[0]); event.target.value = ''; }} /></label>
           </div>
           <section className="arcade-editor-shell">
             <div className="arcade-file-row">
               <span className="arcade-file-icon">{isAudioFile ? <Music2 /> : <FileVideo />}</span>
               <span className="arcade-file-details"><b>{file.name}</b><small>{formatBytes(file.size)} · {formatTime(duration)} · {isAudioFile ? 'MP3 audio' : 'MP4 video'}</small></span>
+              <label className="arcade-replace">Replace file<input className="sr-only" type="file" accept="video/mp4,audio/mpeg,.mp4,.mp3" onChange={(event) => { acceptFile(event.target.files?.[0]); event.target.value = ''; }} /></label>
             </div>
             <div className={`arcade-workspace ${isAudioFile ? 'is-audio' : ''}`}>
               <div className="arcade-media">
@@ -415,7 +415,7 @@ export default function Home() {
                 {!isAudioFile && <button type="button" className="arcade-video-play" aria-label={isPlaying ? 'Pause selected clip' : 'Play selected clip'} onClick={togglePreview}>{isPlaying ? <Pause /> : <Play />}</button>}
               </div>
               <div className="arcade-timeline">
-                <div className="arcade-timeline-heading"><h2>Choose your moment</h2><span><span className="arcade-selected-duration"><b>{clipDuration.toFixed(2)}</b> sec selected</span><em>5 sec max</em></span></div>
+                <div className="arcade-timeline-heading"><h2>Choose your moment</h2><span><span className="arcade-selected-duration"><b>{clipDuration.toFixed(2)}</b> sec selected</span><i>/</i><em><b>5.00</b> sec max</em></span></div>
                 {!duration && <div className="arcade-wave-skeleton" />}
                 <div ref={timelineRef} className={duration ? 'arcade-waveform-shell' : 'hidden'} aria-label="Audio trim control">
                   <div ref={waveformRef} className="arcade-waveform" aria-hidden="true" />
@@ -425,7 +425,7 @@ export default function Home() {
                   <button type="button" className="arcade-trim-handle arcade-trim-end" style={{ left: `${(selection.end / duration) * 100}%` }} aria-label={`Trim end at ${formatTime(selection.end)}`} onPointerDown={(event) => { event.stopPropagation(); event.currentTarget.setPointerCapture(event.pointerId); moveTrimHandle('end', event.clientX); }} onPointerMove={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) moveTrimHandle('end', event.clientX); }} onPointerUp={(event) => event.currentTarget.releasePointerCapture(event.pointerId)} onKeyDown={(event) => { if (event.key === 'ArrowLeft') { event.preventDefault(); updateBoundary('end', String(selection.end - 0.1)); } if (event.key === 'ArrowRight') { event.preventDefault(); updateBoundary('end', String(selection.end + 0.1)); } }} />
                 </div>
                 <div className="arcade-ruler" aria-hidden="true"><span>{formatTime(0)}</span><span>{formatTime(duration / 2)}</span><span>{formatTime(duration)}</span></div>
-                <p className="arcade-timeline-help"><span aria-hidden="true" />Drag the red range to reposition it, or either coral handle to trim. Preview plays only the selected clip.</p>
+                <p className="arcade-timeline-help">Drag the red range to reposition it. Drag either coral handle to trim. Preview plays the selected clip.</p>
                 <div className="arcade-trim-controls">
                   <Button className="arcade-preview-button" onClick={togglePreview} disabled={!duration}>{isPlaying ? <Pause /> : <Play />} {isPlaying ? 'Pause preview' : 'Preview selection'}</Button>
                   <div className="arcade-time-fields">
