@@ -335,9 +335,15 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-timeline-heading b { font-size: 1.05rem; }
 .arcade-timeline-heading em { color: #b7aebf; font-size: .74rem; font-style: normal; }
 .arcade-waveform, .arcade-wave-skeleton { min-height: 8.5rem; margin-top: 1rem; overflow: hidden; background: #19171f; border-radius: .45rem; }
+.arcade-waveform ::part(region) { background: rgba(250, 99, 119, .18) !important; cursor: default !important; }
+.arcade-waveform ::part(region-handle) { width: 8px !important; background: #fa6377; box-shadow: 0 0 0 1px #20131b, 0 0 13px rgba(250, 99, 119, .55); }
+.arcade-waveform ::part(region-handle-left) { border-left: 2px solid #ffe4e9 !important; border-radius: 3px 0 0 3px !important; }
+.arcade-waveform ::part(region-handle-right) { border-right: 2px solid #ffe4e9 !important; border-radius: 0 3px 3px 0 !important; }
 .arcade-wave-skeleton { animation: arcade-pulse 1.4s ease-in-out infinite; }
 @keyframes arcade-pulse { 50% { opacity: .55; } }
 .arcade-ruler { display: flex; justify-content: space-between; padding: .55rem 0 1.1rem; color: #b7aebf; font-family: var(--font-geist-mono), monospace; font-size: .72rem; }
+.arcade-timeline-help { display: flex; align-items: center; gap: .5rem; margin: -0.35rem 0 1rem; color: #b7aebf; font-size: .77rem; line-height: 1.4; }
+.arcade-timeline-help span { display: inline-block; width: .6rem; height: .6rem; flex: 0 0 auto; background: #fa6377; border: 2px solid #ffe4e9; border-radius: 2px; box-shadow: 0 0 8px rgba(250, 99, 119, .55); }
 .arcade-trim-controls { justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
 .arcade-preview-button { min-height: 2.75rem; color: #ffb3be; background: #33252f; border: 1px solid #704150; }
 .arcade-preview-button svg { width: 1rem; }
