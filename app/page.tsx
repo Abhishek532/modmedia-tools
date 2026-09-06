@@ -73,6 +73,7 @@ export default function Home() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const waveformRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
+  const rangeDragRef = useRef<{ offset: number; length: number } | null>(null);
   const wavesurferRef = useRef<WaveSurfer | null>(null);
   const ffmpegRef = useRef<import('@ffmpeg/ffmpeg').FFmpeg | null>(null);
   const selectionRef = useRef(selection);
@@ -186,6 +187,14 @@ export default function Home() {
     resetOutput();
   };
 
+  const applySelection = (next: { start: number; end: number }) => {
+    selectionRef.current = next;
+    setSelection(next);
+    setPlayhead(next.start);
+    setShowPlayhead(false);
+    resetOutput();
+  };
+
   const updateBoundary = (side: 'start' | 'end', raw: string) => {
     const value = Number(raw);
     if (!Number.isFinite(value)) return;
@@ -201,11 +210,7 @@ export default function Home() {
     }
 
     const next = { start, end };
-    selectionRef.current = next;
-    setSelection(next);
-    setPlayhead(next.start);
-    setShowPlayhead(false);
-    resetOutput();
+    applySelection(next);
   };
 
   const moveTrimHandle = (side: 'start' | 'end', clientX: number) => {
@@ -214,6 +219,24 @@ export default function Home() {
     const bounds = timeline.getBoundingClientRect();
     const time = Math.max(0, Math.min(duration, ((clientX - bounds.left) / bounds.width) * duration));
     updateBoundary(side, String(time));
+  };
+
+  const startRangeDrag = (clientX: number) => {
+    const timeline = timelineRef.current;
+    if (!timeline || !duration) return;
+    const bounds = timeline.getBoundingClientRect();
+    const time = Math.max(0, Math.min(duration, ((clientX - bounds.left) / bounds.width) * duration));
+    rangeDragRef.current = { offset: time - selection.start, length: selection.end - selection.start };
+  };
+
+  const moveRange = (clientX: number) => {
+    const timeline = timelineRef.current;
+    const drag = rangeDragRef.current;
+    if (!timeline || !drag || !duration) return;
+    const bounds = timeline.getBoundingClientRect();
+    const time = Math.max(0, Math.min(duration, ((clientX - bounds.left) / bounds.width) * duration));
+    const start = Math.max(0, Math.min(time - drag.offset, duration - drag.length));
+    applySelection({ start, end: start + drag.length });
   };
 
   const togglePreview = () => {
@@ -398,13 +421,13 @@ export default function Home() {
                 {!duration && <div className="arcade-wave-skeleton" />}
                 <div ref={timelineRef} className={duration ? 'arcade-waveform-shell' : 'hidden'} aria-label="Audio trim control">
                   <div ref={waveformRef} className="arcade-waveform" aria-hidden="true" />
-                  <div className="arcade-trim-range" style={{ left: `${(selection.start / duration) * 100}%`, width: `${((selection.end - selection.start) / duration) * 100}%` }} aria-hidden="true" />
+                  <div className="arcade-trim-range" style={{ left: `${(selection.start / duration) * 100}%`, width: `${((selection.end - selection.start) / duration) * 100}%` }} aria-label="Selected clip range. Drag to reposition." onPointerDown={(event) => { event.currentTarget.setPointerCapture(event.pointerId); startRangeDrag(event.clientX); }} onPointerMove={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) moveRange(event.clientX); }} onPointerUp={(event) => { rangeDragRef.current = null; event.currentTarget.releasePointerCapture(event.pointerId); }} />
                   {showPlayhead && <div className="arcade-playhead" style={{ left: `${(playhead / duration) * 100}%` }} aria-hidden="true" />}
                   <button type="button" className="arcade-trim-handle arcade-trim-start" style={{ left: `${(selection.start / duration) * 100}%` }} aria-label={`Trim start at ${formatTime(selection.start)}`} onPointerDown={(event) => { event.stopPropagation(); event.currentTarget.setPointerCapture(event.pointerId); moveTrimHandle('start', event.clientX); }} onPointerMove={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) moveTrimHandle('start', event.clientX); }} onPointerUp={(event) => event.currentTarget.releasePointerCapture(event.pointerId)} onKeyDown={(event) => { if (event.key === 'ArrowLeft') { event.preventDefault(); updateBoundary('start', String(selection.start - 0.1)); } if (event.key === 'ArrowRight') { event.preventDefault(); updateBoundary('start', String(selection.start + 0.1)); } }} />
                   <button type="button" className="arcade-trim-handle arcade-trim-end" style={{ left: `${(selection.end / duration) * 100}%` }} aria-label={`Trim end at ${formatTime(selection.end)}`} onPointerDown={(event) => { event.stopPropagation(); event.currentTarget.setPointerCapture(event.pointerId); moveTrimHandle('end', event.clientX); }} onPointerMove={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) moveTrimHandle('end', event.clientX); }} onPointerUp={(event) => event.currentTarget.releasePointerCapture(event.pointerId)} onKeyDown={(event) => { if (event.key === 'ArrowLeft') { event.preventDefault(); updateBoundary('end', String(selection.end - 0.1)); } if (event.key === 'ArrowRight') { event.preventDefault(); updateBoundary('end', String(selection.end + 0.1)); } }} />
                 </div>
                 <div className="arcade-ruler" aria-hidden="true"><span>{formatTime(0)}</span><span>{formatTime(duration / 2)}</span><span>{formatTime(duration)}</span></div>
-                <p className="arcade-timeline-help"><span aria-hidden="true" />Drag either coral handle to trim. Preview plays only the selected clip.</p>
+                <p className="arcade-timeline-help"><span aria-hidden="true" />Drag the red range to reposition it, or either coral handle to trim. Preview plays only the selected clip.</p>
                 <div className="arcade-trim-controls">
                   <Button className="arcade-preview-button" onClick={togglePreview} disabled={!duration}>{isPlaying ? <Pause /> : <Play />} {isPlaying ? 'Pause preview' : 'Preview selection'}</Button>
                   <div className="arcade-time-fields">

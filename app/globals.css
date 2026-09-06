@@ -338,7 +338,8 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-waveform-shell { position: relative; height: 108px; touch-action: none; cursor: default; }
 .arcade-waveform { position: absolute; inset: 0; height: 108px; pointer-events: none; }
 .arcade-wave-skeleton { min-height: 6.75rem; }
-.arcade-trim-range { position: absolute; z-index: 2; top: 0; bottom: 0; pointer-events: none; background: rgba(250, 99, 119, .22); border-inline: 1px solid #fa6377; }
+.arcade-trim-range { position: absolute; z-index: 2; top: 0; bottom: 0; cursor: grab; background: rgba(250, 99, 119, .22); border-inline: 1px solid #fa6377; touch-action: none; }
+.arcade-trim-range:active { cursor: grabbing; }
 .arcade-playhead { position: absolute; z-index: 3; top: 0; bottom: 0; width: 3px; pointer-events: none; background: #f2f3f5; box-shadow: 0 0 0 1px #20131b, 0 0 10px rgba(242, 243, 245, .7); transform: translateX(-50%); }
 .arcade-playhead::before { position: absolute; top: 0; left: 50%; width: 10px; height: 10px; content: ''; background: #f2f3f5; border-radius: 0 0 5px 5px; transform: translateX(-50%); }
 .arcade-trim-handle { position: absolute; z-index: 4; top: -4px; bottom: -4px; width: 16px; padding: 0; cursor: ew-resize; background: transparent; border: 0; transform: translateX(-50%); touch-action: none; }
