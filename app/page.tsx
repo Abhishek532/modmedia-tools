@@ -426,9 +426,9 @@ export default function Home() {
                   <button type="button" className="arcade-trim-handle arcade-trim-end" style={{ left: `${(selection.end / duration) * 100}%` }} aria-label={`Trim end at ${formatTime(selection.end)}`} onPointerDown={(event) => { event.stopPropagation(); event.currentTarget.setPointerCapture(event.pointerId); moveTrimHandle('end', event.clientX); }} onPointerMove={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) moveTrimHandle('end', event.clientX); }} onPointerUp={(event) => event.currentTarget.releasePointerCapture(event.pointerId)} onKeyDown={(event) => { if (event.key === 'ArrowLeft') { event.preventDefault(); updateBoundary('end', String(selection.end - 0.1)); } if (event.key === 'ArrowRight') { event.preventDefault(); updateBoundary('end', String(selection.end + 0.1)); } }} />
                 </div>
                 <div className="arcade-ruler" aria-hidden="true"><span>{formatTime(0)}</span><span>{formatTime(duration / 2)}</span><span>{formatTime(duration)}</span></div>
-                <div className="arcade-duration-status"><span className="arcade-selected-duration"><b>{clipDuration.toFixed(2)}</b> sec selected</span><i>/</i><em><b>5.00</b> sec max</em></div>
                 <div className="arcade-trim-controls">
-                  <Button className="arcade-preview-button" onClick={togglePreview} disabled={!duration}>{isPlaying ? <Pause /> : <Play />} {isPlaying ? 'Pause preview' : 'Preview selection'}</Button>
+                  <Button className="arcade-preview-button" onClick={togglePreview} disabled={!duration} aria-label={isPlaying ? 'Pause selected clip' : 'Play selected clip'}>{isPlaying ? <Pause /> : <Play />}</Button>
+                  <div className="arcade-duration-status"><span className="arcade-selected-duration"><b>{clipDuration.toFixed(2)}</b> sec selected</span><i>/</i><em><b>5.00</b> sec max</em></div>
                   <div className="arcade-time-fields">
                     <label htmlFor="clip-start"><span>Start</span><div><Input id="clip-start" type="number" min={0} max={Math.max(0, selection.end - 0.1)} step={0.01} value={selection.start.toFixed(2)} onChange={(event) => updateBoundary('start', event.target.value)} /><span>sec</span></div></label>
                     <span className="arcade-time-arrow">→</span>

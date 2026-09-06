@@ -330,7 +330,7 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-timeline { min-width: 0; }
 .arcade-timeline-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
 .arcade-timeline-heading h2 { margin: 0; font-size: 1.27rem; font-weight: 700; }
-.arcade-duration-status { display: flex; align-items: baseline; justify-content: flex-end; gap: .42rem; margin: -.45rem 0 1rem; font-family: var(--font-geist-mono), monospace; }
+.arcade-duration-status { display: flex; align-items: baseline; gap: .42rem; font-family: var(--font-geist-mono), monospace; }
 .arcade-selected-duration { color: #c8c0cf; font-size: .72rem; }
 .arcade-selected-duration b { color: #c8c0cf; font-size: .88rem; }
 .arcade-duration-status i { color: #83798b; font-size: .78rem; font-style: normal; }
@@ -354,9 +354,10 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 @keyframes arcade-pulse { 50% { opacity: .55; } }
 .arcade-ruler { display: flex; justify-content: space-between; padding: .55rem 0 1.1rem; color: #b7aebf; font-family: var(--font-geist-mono), monospace; font-size: .72rem; }
 .arcade-timeline-help { margin: .45rem 0 .85rem; color: #b7aebf; font-size: .77rem; line-height: 1.4; }
-.arcade-trim-controls { justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-.arcade-preview-button { min-height: 2.75rem; color: #ffb3be; background: #33252f; border: 1px solid #704150; }
-.arcade-preview-button svg { width: 1rem; }
+.arcade-trim-controls { justify-content: flex-start; gap: 1rem; flex-wrap: wrap; }
+.arcade-preview-button { width: 2.75rem; min-width: 2.75rem; height: 2.75rem; padding: 0; color: #ffb3be; background: #33252f; border: 1px solid #704150; }
+.arcade-preview-button svg { width: 1.05rem; height: 1.05rem; }
+.arcade-time-fields { margin-left: auto; }
 .arcade-time-fields { display: flex; align-items: end; gap: .65rem; }
 .arcade-time-fields label > span { display: block; color: #b7aebf; font-size: .72rem; }
 .arcade-time-fields label > div { display: flex; align-items: center; width: 7.2rem; margin-top: .32rem; background: #1b1822; border: 1px solid #554c61; border-radius: .42rem; }
