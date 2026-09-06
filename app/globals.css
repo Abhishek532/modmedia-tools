@@ -335,7 +335,7 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-timeline-heading b { font-size: 1.05rem; }
 .arcade-timeline-heading em { color: #b7aebf; font-size: .74rem; font-style: normal; }
 .arcade-waveform-shell, .arcade-wave-skeleton { margin-top: 1rem; overflow: hidden; background: #19171f; border-radius: .45rem; }
-.arcade-waveform-shell { position: relative; height: 108px; touch-action: none; cursor: crosshair; }
+.arcade-waveform-shell { position: relative; height: 108px; touch-action: none; cursor: default; }
 .arcade-waveform { position: absolute; inset: 0; height: 108px; pointer-events: none; }
 .arcade-wave-skeleton { min-height: 6.75rem; }
 .arcade-trim-range { position: absolute; z-index: 2; top: 0; bottom: 0; pointer-events: none; background: rgba(250, 99, 119, .22); border-inline: 1px solid #fa6377; }

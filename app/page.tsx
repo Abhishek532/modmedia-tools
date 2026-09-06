@@ -58,6 +58,7 @@ export default function Home() {
   const [duration, setDuration] = useState(0);
   const [selection, setSelection] = useState({ start: 0, end: 5 });
   const [playhead, setPlayhead] = useState(0);
+  const [showPlayhead, setShowPlayhead] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [normalize, setNormalize] = useState(true);
@@ -129,6 +130,7 @@ export default function Home() {
       if (time >= current.end && !videoRef.current?.paused) {
         wavesurfer.pause();
         wavesurfer.setTime(current.start);
+        setPlayhead(current.start);
       }
     });
     wavesurfer.on('error', () => {
@@ -166,6 +168,8 @@ export default function Home() {
       setFile(nextFile);
       setDuration(0);
       setSelection({ start: 0, end: 5 });
+      setPlayhead(0);
+      setShowPlayhead(false);
       setOutputName(safeName(nextFile.name));
     },
     [resetOutput],
@@ -176,6 +180,8 @@ export default function Home() {
     setFile(null);
     setDuration(0);
     setSelection({ start: 0, end: 5 });
+    setPlayhead(0);
+    setShowPlayhead(false);
     setIsPlaying(false);
     resetOutput();
   };
@@ -197,17 +203,9 @@ export default function Home() {
     const next = { start, end };
     selectionRef.current = next;
     setSelection(next);
+    setPlayhead(next.start);
+    setShowPlayhead(false);
     resetOutput();
-  };
-
-  const seekTimeline = (clientX: number) => {
-    const timeline = timelineRef.current;
-    const wavesurfer = wavesurferRef.current;
-    if (!timeline || !wavesurfer || !duration) return;
-    const bounds = timeline.getBoundingClientRect();
-    const time = Math.max(0, Math.min(duration, ((clientX - bounds.left) / bounds.width) * duration));
-    wavesurfer.setTime(time);
-    setPlayhead(time);
   };
 
   const moveTrimHandle = (side: 'start' | 'end', clientX: number) => {
@@ -224,8 +222,11 @@ export default function Home() {
     if (isPlaying) {
       wavesurfer.pause();
     } else {
-      wavesurfer.setTime(selection.start);
-      wavesurfer.play(selection.start, selection.end);
+      const resumeAt = showPlayhead && playhead >= selection.start && playhead < selection.end ? playhead : selection.start;
+      wavesurfer.setTime(resumeAt);
+      setPlayhead(resumeAt);
+      setShowPlayhead(true);
+      wavesurfer.play(resumeAt, selection.end);
     }
   };
 
@@ -387,7 +388,7 @@ export default function Home() {
             </div>
             <div className={`arcade-workspace ${isAudioFile ? 'is-audio' : ''}`}>
               <div className="arcade-media">
-                <video ref={videoRef} src={fileUrl} className={isAudioFile ? 'sr-only' : 'arcade-video'} playsInline preload="metadata" onLoadedMetadata={(event) => { const nextDuration = event.currentTarget.duration; if (!Number.isFinite(nextDuration) || nextDuration < 0.1) { setError('This file has an invalid duration.'); return; } setDuration(nextDuration); setSelection({ start: 0, end: Math.min(MAX_CLIP_SECONDS, nextDuration) }); }}>
+                <video ref={videoRef} src={fileUrl} className={isAudioFile ? 'sr-only' : 'arcade-video'} playsInline preload="metadata" onLoadedMetadata={(event) => { const nextDuration = event.currentTarget.duration; if (!Number.isFinite(nextDuration) || nextDuration < 0.1) { setError('This file has an invalid duration.'); return; } const nextSelection = { start: 0, end: Math.min(MAX_CLIP_SECONDS, nextDuration) }; setDuration(nextDuration); selectionRef.current = nextSelection; setSelection(nextSelection); setPlayhead(0); setShowPlayhead(false); }}>
                   <track kind="captions" srcLang="en" label="User-provided media" />
                 </video>
                 {!isAudioFile && <button type="button" className="arcade-video-play" aria-label={isPlaying ? 'Pause selected clip' : 'Play selected clip'} onClick={togglePreview}>{isPlaying ? <Pause /> : <Play />}</button>}
@@ -395,15 +396,15 @@ export default function Home() {
               <div className="arcade-timeline">
                 <div className="arcade-timeline-heading"><h2>Choose your moment</h2><span><b>{clipDuration.toFixed(2)}</b> sec selected <em>/ 5 sec max</em></span></div>
                 {!duration && <div className="arcade-wave-skeleton" />}
-                <div ref={timelineRef} className={duration ? 'arcade-waveform-shell' : 'hidden'} onPointerDown={(event) => seekTimeline(event.clientX)} aria-label="Audio trim control">
+                <div ref={timelineRef} className={duration ? 'arcade-waveform-shell' : 'hidden'} aria-label="Audio trim control">
                   <div ref={waveformRef} className="arcade-waveform" aria-hidden="true" />
                   <div className="arcade-trim-range" style={{ left: `${(selection.start / duration) * 100}%`, width: `${((selection.end - selection.start) / duration) * 100}%` }} aria-hidden="true" />
-                  <div className="arcade-playhead" style={{ left: `${(playhead / duration) * 100}%` }} aria-hidden="true" />
+                  {showPlayhead && <div className="arcade-playhead" style={{ left: `${(playhead / duration) * 100}%` }} aria-hidden="true" />}
                   <button type="button" className="arcade-trim-handle arcade-trim-start" style={{ left: `${(selection.start / duration) * 100}%` }} aria-label={`Trim start at ${formatTime(selection.start)}`} onPointerDown={(event) => { event.stopPropagation(); event.currentTarget.setPointerCapture(event.pointerId); moveTrimHandle('start', event.clientX); }} onPointerMove={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) moveTrimHandle('start', event.clientX); }} onPointerUp={(event) => event.currentTarget.releasePointerCapture(event.pointerId)} onKeyDown={(event) => { if (event.key === 'ArrowLeft') { event.preventDefault(); updateBoundary('start', String(selection.start - 0.1)); } if (event.key === 'ArrowRight') { event.preventDefault(); updateBoundary('start', String(selection.start + 0.1)); } }} />
                   <button type="button" className="arcade-trim-handle arcade-trim-end" style={{ left: `${(selection.end / duration) * 100}%` }} aria-label={`Trim end at ${formatTime(selection.end)}`} onPointerDown={(event) => { event.stopPropagation(); event.currentTarget.setPointerCapture(event.pointerId); moveTrimHandle('end', event.clientX); }} onPointerMove={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) moveTrimHandle('end', event.clientX); }} onPointerUp={(event) => event.currentTarget.releasePointerCapture(event.pointerId)} onKeyDown={(event) => { if (event.key === 'ArrowLeft') { event.preventDefault(); updateBoundary('end', String(selection.end - 0.1)); } if (event.key === 'ArrowRight') { event.preventDefault(); updateBoundary('end', String(selection.end + 0.1)); } }} />
                 </div>
                 <div className="arcade-ruler" aria-hidden="true"><span>{formatTime(0)}</span><span>{formatTime(duration / 2)}</span><span>{formatTime(duration)}</span></div>
-                <p className="arcade-timeline-help"><span aria-hidden="true" />Click the waveform to preview a moment. Drag either handle to trim the clip.</p>
+                <p className="arcade-timeline-help"><span aria-hidden="true" />Drag either coral handle to trim. Preview plays only the selected clip.</p>
                 <div className="arcade-trim-controls">
                   <Button className="arcade-preview-button" onClick={togglePreview} disabled={!duration}>{isPlaying ? <Pause /> : <Play />} {isPlaying ? 'Pause preview' : 'Preview selection'}</Button>
                   <div className="arcade-time-fields">
