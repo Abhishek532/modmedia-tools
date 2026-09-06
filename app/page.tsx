@@ -426,12 +426,14 @@ export default function Home() {
             {stage === 'done' && outputUrl && <div className="arcade-success"><div><span><Check /> Discord-ready</span><small>{clipDuration.toFixed(2)} sec · {formatBytes(outputSize)} · MP3</small></div><audio controls src={outputUrl}><track kind="captions" srcLang="en" label="Generated sound clip" />Your browser does not support audio playback.</audio></div>}
             <footer className="arcade-export">
               <label htmlFor="output-name"><span>File name</span><div className="arcade-name-field"><input id="output-name" value={outputName} onChange={(event) => setOutputName(safeName(event.target.value))} aria-label="Output file name" /><span>.mp3</span></div></label>
-              <div className="arcade-output-summary"><span><b>{clipDuration.toFixed(2)} sec</b> · MP3</span><small>{stage === 'done' ? formatBytes(outputSize) : `Est. ${Math.ceil(clipDuration * 16 + 1)} KB`} / 512 KB max</small></div>
-              {stage === 'done' && outputUrl ? (
-                <Button className="arcade-create-button" render={<a href={outputUrl} download={`${outputName || 'soundboard-clip'}.mp3`} aria-label="Download generated MP3"><span className="sr-only">Download generated MP3</span></a>}><Download /> Download MP3</Button>
-              ) : (
-                <Button className="arcade-create-button" onClick={convert} disabled={!duration || isBusy || clipDuration <= 0 || clipDuration > MAX_CLIP_SECONDS}><Scissors /> {isBusy ? 'Working…' : 'Create MP3'}</Button>
-              )}
+              <div className="arcade-export-action">
+                <div className="arcade-output-summary"><span>{clipDuration.toFixed(2)} sec</span><span>{stage === 'done' ? formatBytes(outputSize) : `${Math.ceil(clipDuration * 16 + 1)} KB`}</span></div>
+                {stage === 'done' && outputUrl ? (
+                  <Button className="arcade-create-button" render={<a href={outputUrl} download={`${outputName || 'soundboard-clip'}.mp3`} aria-label="Download generated MP3"><span className="sr-only">Download generated MP3</span></a>}><Download /> Download MP3</Button>
+                ) : (
+                  <Button className="arcade-create-button" onClick={convert} disabled={!duration || isBusy || clipDuration <= 0 || clipDuration > MAX_CLIP_SECONDS}><Scissors /> {isBusy ? 'Working…' : 'Create MP3'}</Button>
+                )}
+              </div>
             </footer>
           </section>
           <p className="arcade-local-note"><LockKeyhole /> Your file never leaves this browser</p>
