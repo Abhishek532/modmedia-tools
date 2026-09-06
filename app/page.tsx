@@ -108,14 +108,14 @@ export default function Home() {
       container: waveformRef.current,
       media: videoRef.current,
       url: fileUrl,
-      height: 88,
-      waveColor: '#4d5679',
-      progressColor: '#9aa4ff',
-      cursorColor: '#ffffff',
+      height: 108,
+      waveColor: '#71667c',
+      progressColor: '#fa6377',
+      cursorColor: '#ffe4e9',
       cursorWidth: 2,
-      barWidth: 2,
-      barGap: 2,
-      barRadius: 3,
+      barWidth: 3,
+      barGap: 3,
+      barRadius: 2,
       barMinHeight: 2,
       normalize: true,
       dragToSeek: true,
@@ -130,7 +130,7 @@ export default function Home() {
         end,
         minLength: 0.1,
         maxLength: MAX_CLIP_SECONDS,
-        color: 'rgba(88, 101, 242, .34)',
+        color: 'rgba(250, 99, 119, .18)',
         drag: true,
         resize: true,
       });
@@ -359,322 +359,78 @@ export default function Home() {
   const isBusy = stage === 'loading' || stage === 'converting';
 
   return (
-    <main className="min-h-screen overflow-hidden bg-background text-foreground">
-      <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-5 sm:px-8">
-        <button className="flex items-center gap-3 text-left" onClick={clearFile} type="button">
-          <span className="grid size-10 place-items-center rounded-xl bg-primary text-primary-foreground shadow-[0_0_32px_rgba(88,101,242,.35)]">
-            <Music2 className="size-5" strokeWidth={2.4} />
-          </span>
-          <span>
-            <span className="block text-[15px] font-bold tracking-[-0.02em]">SoundSlice</span>
-            <span className="block text-[10px] font-semibold uppercase tracking-[0.17em] text-muted-foreground">Discord clip maker</span>
-          </span>
-        </button>
-        <span className="hidden items-center gap-2 rounded-full border border-white/8 bg-white/[.035] px-3 py-1.5 text-xs text-muted-foreground sm:flex">
-          <LockKeyhole className="size-3.5 text-emerald-400" />
-          Files stay on your device
-        </span>
+    <main className="arcade-app">
+      <header className="arcade-header">
+        <button className="arcade-brand" onClick={clearFile} type="button" aria-label="SoundSlice home"><span className="arcade-monogram">SS</span><span>SoundSlice</span></button>
+        <span className="arcade-private"><LockKeyhole /> Files stay on your device</span>
       </header>
-
       {!file ? (
-        <section className="mx-auto grid w-full max-w-7xl gap-10 px-5 pb-16 pt-8 sm:px-8 lg:grid-cols-[.78fr_1.22fr] lg:items-center lg:gap-16 lg:pt-16">
-          <div className="max-w-xl">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1.5 text-xs font-semibold text-[#aeb5ff]">
-              <span className="size-1.5 rounded-full bg-[#7cffb2] shadow-[0_0_10px_#7cffb2]" />
-              Built for Discord’s 5-second limit
-            </div>
-            <h1 className="text-balance text-5xl font-black leading-[.94] tracking-[-0.055em] sm:text-6xl lg:text-7xl">
-              Cut the moment.<br />
-              <span className="text-[#8e9aff]">Keep the chaos.</span>
-            </h1>
-            <p className="mt-6 max-w-lg text-base leading-7 text-muted-foreground sm:text-lg">
-              Turn any MP4 or MP3 into a clean, Discord-ready sound. Pick the exact moment, preview it, and download—no uploads to a server.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm text-[#afb5cc]">
-              <span className="flex items-center gap-2"><span className="text-[#7cffb2]">✓</span> Max 5 seconds</span>
-              <span className="flex items-center gap-2"><span className="text-[#7cffb2]">✓</span> Under 512 KB</span>
-              <span className="flex items-center gap-2"><span className="text-[#7cffb2]">✓</span> MP3 output</span>
-            </div>
+        <section className="arcade-upload-page">
+          <div className="arcade-upload-intro"><p className="arcade-eyebrow">Discord soundboard clip maker</p><h1>Your next soundboard hit.</h1><p>Trim an MP4 or MP3 to five seconds, tune the sound, and download a Discord-ready MP3.</p></div>
+          <div className={`arcade-drop-shell ${isDragging ? 'is-dragging' : ''}`} onDragEnter={(event) => { event.preventDefault(); setIsDragging(true); }} onDragLeave={(event) => { event.preventDefault(); if (event.currentTarget === event.target) setIsDragging(false); }} onDragOver={(event) => event.preventDefault()} onDrop={(event) => { event.preventDefault(); setIsDragging(false); acceptFile(event.dataTransfer.files[0]); }}>
+            <label className="arcade-drop-zone">
+              <input className="sr-only" type="file" accept="video/mp4,audio/mpeg,.mp4,.mp3" onChange={(event) => { acceptFile(event.target.files?.[0]); event.target.value = ''; }} />
+              <span className="arcade-upload-icon"><UploadCloud /></span><span className="arcade-drop-title">{isDragging ? 'Drop it here' : 'Drop an MP4 or MP3'}</span><span className="arcade-drop-copy">Drag a file here or choose one from your device</span><span className="arcade-choose-button">Choose file</span><span className="arcade-upload-limits">Up to 250 MB · processed locally</span>
+            </label>
           </div>
-
-          <div
-            className="relative"
-            onDragEnter={(event) => {
-              event.preventDefault();
-              setIsDragging(true);
-            }}
-            onDragLeave={(event) => {
-              event.preventDefault();
-              if (event.currentTarget === event.target) setIsDragging(false);
-            }}
-            onDragOver={(event) => event.preventDefault()}
-            onDrop={(event) => {
-              event.preventDefault();
-              setIsDragging(false);
-              acceptFile(event.dataTransfer.files[0]);
-            }}
-          >
-            <div className="pointer-events-none absolute -inset-20 -z-0 rounded-full bg-primary/15 blur-3xl" />
-            <div className="relative rounded-[28px] border border-white/10 bg-[#11162c]/90 p-3 shadow-[0_30px_100px_rgba(0,0,0,.4)] backdrop-blur sm:p-4">
-              <label className={`group flex min-h-[390px] cursor-pointer flex-col items-center justify-center rounded-[20px] border border-dashed px-6 text-center transition ${isDragging ? 'border-primary bg-primary/10' : 'border-white/15 bg-[radial-gradient(circle_at_50%_0%,rgba(88,101,242,.16),transparent_48%)] hover:border-primary/70 hover:bg-primary/[.045]'}`}>
-                <input
-                  className="sr-only"
-                  type="file"
-                  accept="video/mp4,audio/mpeg,.mp4,.mp3"
-                  onChange={(event) => {
-                    acceptFile(event.target.files?.[0]);
-                    event.target.value = '';
-                  }}
-                />
-                <span className="relative mb-6 grid size-20 place-items-center rounded-2xl border border-white/10 bg-white/[.055] text-[#9ca6ff] shadow-xl transition group-hover:-translate-y-1 group-hover:scale-105">
-                  <FileVideo className="size-9" />
-                  <span className="absolute -bottom-2 -right-2 grid size-8 place-items-center rounded-full bg-primary text-white ring-4 ring-[#11162c]">
-                    <UploadCloud className="size-4" />
-                  </span>
-                </span>
-                <h2 className="text-xl font-bold tracking-tight">{isDragging ? 'Drop it here' : 'Drop your MP4 or MP3 here'}</h2>
-                <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">or click to choose a file from your device</p>
-                <span className="mt-7 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white shadow-[0_10px_30px_rgba(88,101,242,.28)]">Choose file</span>
-                <p className="mt-5 text-xs text-[#747b94]">MP4 or MP3 · up to 250 MB</p>
-              </label>
-            </div>
-          </div>
-          {error && (
-            <div className="lg:col-start-2 flex items-center gap-2 rounded-xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm text-red-200" role="alert">
-              <CircleAlert className="size-4 shrink-0" /> {error}
-            </div>
-          )}
+          {error && <div className="arcade-alert" role="alert"><CircleAlert /> {error}</div>}
+          <div className="arcade-specs" aria-label="Output requirements"><span><b>5 sec</b><small>Maximum length</small></span><span><b>512 KB</b><small>Maximum size</small></span><span><b>MP3</b><small>Discord format</small></span></div>
         </section>
       ) : (
-        <section className="mx-auto w-full max-w-7xl px-5 pb-16 pt-5 sm:px-8">
-          <div className="mb-7 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.17em] text-[#8e9aff]">Create your clip</p>
-              <h1 className="mt-2 text-3xl font-black tracking-[-0.035em] sm:text-4xl">Find the perfect five seconds.</h1>
-            </div>
-            <Button variant="outline" className="h-10 self-start rounded-xl border-white/10 bg-white/[.03] px-4" onClick={clearFile}>
-              <RotateCcw /> Start over
-            </Button>
+        <section className="arcade-editor-page">
+          <div className="arcade-editor-intro">
+            <div><p className="arcade-eyebrow">Soundboard clip maker</p><h1>Your next soundboard hit.</h1><p>Find the moment. Keep the reaction.</p></div>
+            <Button variant="outline" className="arcade-start-over" onClick={clearFile}><RotateCcw /> Start over</Button>
           </div>
-
-          <div className="grid gap-5 lg:grid-cols-[1.3fr_.7fr]">
-            <div className="space-y-5">
-              <section className="overflow-hidden rounded-3xl border border-white/10 bg-[#11162c] shadow-2xl">
-                <div className={`relative aspect-video ${isAudioFile ? 'bg-[radial-gradient(circle_at_50%_40%,rgba(88,101,242,.3),transparent_55%),#090c19]' : 'bg-black'}`}>
-                  <video
-                    ref={videoRef}
-                    src={fileUrl}
-                    className={isAudioFile ? 'sr-only' : 'size-full object-contain'}
-                    playsInline
-                    preload="metadata"
-                    onLoadedMetadata={(event) => {
-                      const nextDuration = event.currentTarget.duration;
-                      if (!Number.isFinite(nextDuration) || nextDuration < 0.1) {
-                        setError('This file has an invalid duration.');
-                        return;
-                      }
-                      setDuration(nextDuration);
-                      setSelection({ start: 0, end: Math.min(MAX_CLIP_SECONDS, nextDuration) });
-                    }}
-                  >
-                    <track kind="captions" srcLang="en" label="User-provided video" />
-                  </video>
-                  {isAudioFile && (
-                    <div className="absolute inset-0 grid place-items-center" aria-hidden="true">
-                      <span className="grid size-28 place-items-center rounded-full border border-primary/25 bg-primary/15 text-[#aeb5ff] shadow-[0_0_70px_rgba(88,101,242,.35)]">
-                        <Music2 className="size-12" />
-                      </span>
-                    </div>
-                  )}
-                  <button
-                    type="button"
-                    aria-label={isPlaying ? 'Pause selected clip' : 'Play selected clip'}
-                    onClick={togglePreview}
-                    className="absolute left-1/2 top-1/2 grid size-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-[#0b0e1b]/70 text-white shadow-2xl backdrop-blur transition hover:scale-105 hover:bg-primary"
-                  >
-                    {isPlaying ? <Pause className="size-6 fill-current" /> : <Play className="ml-1 size-6 fill-current" />}
-                  </button>
-                </div>
-
-                <div className="border-t border-white/8 p-4 sm:p-6">
-                  <div className="mb-4 flex items-center justify-between gap-3">
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-bold">{file.name}</p>
-                      <p className="mt-1 text-xs text-muted-foreground">{formatBytes(file.size)} · {formatTime(duration)}</p>
-                    </div>
-                    <span className="shrink-0 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-bold text-[#aeb5ff]">
-                      {clipDuration.toFixed(2)}s selected
-                    </span>
-                  </div>
-
-                  <div className="rounded-2xl border border-white/8 bg-[#0b0f20] p-4">
-                    {!duration && <div className="h-[88px] animate-pulse rounded-xl bg-white/5" />}
-                    <div ref={waveformRef} className={duration ? 'block' : 'hidden'} aria-label="Audio waveform with draggable trim handles" />
-                    <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                      <Button className="h-10 rounded-xl px-4 font-bold" onClick={togglePreview} disabled={!duration}>
-                        {isPlaying ? <Pause /> : <Play />} {isPlaying ? 'Pause clip' : 'Preview clip'}
-                      </Button>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <Scissors className="size-4 text-[#8e9aff]" />
-                        Drag the purple region or its edges
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              <section className="grid gap-3 rounded-2xl border border-white/10 bg-[#11162c] p-4 sm:grid-cols-2 sm:p-5">
-                <label className="block" htmlFor="clip-start">
-                  <span className="mb-2 block text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">Starts at</span>
-                  <div className="relative">
-                    <Input
-                      id="clip-start"
-                      type="number"
-                      min={0}
-                      max={Math.max(0, selection.end - 0.1)}
-                      step={0.01}
-                      value={selection.start.toFixed(2)}
-                      onChange={(event) => updateBoundary('start', event.target.value)}
-                      className="h-11 rounded-xl border-white/10 bg-white/[.035] pr-12 text-base font-bold tabular-nums"
-                    />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">sec</span>
-                  </div>
-                </label>
-                <label className="block" htmlFor="clip-end">
-                  <span className="mb-2 block text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">Ends at</span>
-                  <div className="relative">
-                    <Input
-                      id="clip-end"
-                      type="number"
-                      min={selection.start + 0.1}
-                      max={duration}
-                      step={0.01}
-                      value={selection.end.toFixed(2)}
-                      onChange={(event) => updateBoundary('end', event.target.value)}
-                      className="h-11 rounded-xl border-white/10 bg-white/[.035] pr-12 text-base font-bold tabular-nums"
-                    />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">sec</span>
-                  </div>
-                </label>
-              </section>
+          <section className="arcade-editor-shell">
+            <div className="arcade-file-row">
+              <span className="arcade-file-icon">{isAudioFile ? <Music2 /> : <FileVideo />}</span>
+              <span className="arcade-file-details"><b>{file.name}</b><small>{formatBytes(file.size)} · {formatTime(duration)} · {isAudioFile ? 'MP3 audio' : 'MP4 video'}</small></span>
+              <label className="arcade-replace">Replace file<input className="sr-only" type="file" accept="video/mp4,audio/mpeg,.mp4,.mp3" onChange={(event) => { acceptFile(event.target.files?.[0]); event.target.value = ''; }} /></label>
             </div>
-
-            <aside className="space-y-5">
-              <section className="rounded-3xl border border-white/10 bg-[#11162c] p-5 shadow-xl sm:p-6">
-                <div className="flex items-center gap-3">
-                  <span className="grid size-10 place-items-center rounded-xl bg-primary/15 text-[#9ca6ff]"><WandSparkles className="size-5" /></span>
-                  <div>
-                    <h2 className="font-bold">Finish your sound</h2>
-                    <p className="text-xs text-muted-foreground">Optimized for Discord</p>
-                  </div>
-                </div>
-
-                <label className="mt-6 block" htmlFor="output-name">
-                  <span className="mb-2 block text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">File name</span>
-                  <div className="flex items-center rounded-xl border border-white/10 bg-white/[.035] focus-within:border-primary focus-within:ring-3 focus-within:ring-primary/20">
-                    <input
-                      id="output-name"
-                      value={outputName}
-                      onChange={(event) => setOutputName(safeName(event.target.value))}
-                      className="h-11 min-w-0 flex-1 bg-transparent px-3 text-sm font-semibold outline-none"
-                      aria-label="Output file name"
-                    />
-                    <span className="pr-3 text-xs text-muted-foreground">.mp3</span>
-                  </div>
-                </label>
-
-                <div className="mt-5 divide-y divide-white/8 rounded-2xl border border-white/8 bg-[#0b0f20] px-4">
-                  <div className="flex items-center justify-between gap-4 py-4">
-                    <span id="normalize-label">
-                      <span className="flex items-center gap-2 text-sm font-bold"><Sparkles className="size-4 text-[#8e9aff]" /> Normalize volume</span>
-                      <span className="mt-1 block text-xs text-muted-foreground">Clear and consistent loudness</span>
-                    </span>
-                    <Switch checked={normalize} onCheckedChange={(checked) => { setNormalize(checked); resetOutput(); }} aria-labelledby="normalize-label" />
-                  </div>
-                  <div className="flex items-center justify-between gap-4 py-4">
-                    <span id="fade-label">
-                      <span className="flex items-center gap-2 text-sm font-bold"><Music2 className="size-4 text-[#8e9aff]" /> Smooth edges</span>
-                      <span className="mt-1 block text-xs text-muted-foreground">Tiny fade to prevent clicks</span>
-                    </span>
-                    <Switch checked={fade} onCheckedChange={(checked) => { setFade(checked); resetOutput(); }} aria-labelledby="fade-label" />
-                  </div>
-                </div>
-
-                {isBusy && (
-                  <div className="mt-5 rounded-2xl border border-primary/20 bg-primary/8 p-4" aria-live="polite">
-                    <div className="mb-3 flex items-center justify-between text-xs">
-                      <span className="font-bold">{stage === 'loading' ? 'Preparing audio engine…' : 'Creating your MP3…'}</span>
-                      <span className="tabular-nums text-muted-foreground">{Math.round(progress)}%</span>
-                    </div>
-                    <Progress value={progress} className="[&_[data-slot=progress-track]]:h-2" />
-                  </div>
-                )}
-
-                {error && (
-                  <div className="mt-5 flex items-start gap-2 rounded-xl border border-red-400/20 bg-red-400/10 px-3 py-3 text-xs leading-5 text-red-200" role="alert">
-                    <CircleAlert className="mt-0.5 size-4 shrink-0" /> {error}
-                  </div>
-                )}
-
-                {stage === 'done' && outputUrl && (
-                  <div className="mt-5 rounded-2xl border border-emerald-400/20 bg-emerald-400/[.07] p-4">
-                    <div className="flex items-center gap-2 text-sm font-bold text-emerald-300"><Check className="size-4" /> Discord-ready</div>
-                    <div className="mt-3 flex gap-3 text-xs text-muted-foreground">
-                      <span>{clipDuration.toFixed(2)} sec</span>
-                      <span>•</span>
-                      <span>{formatBytes(outputSize)}</span>
-                      <span>•</span>
-                      <span>MP3</span>
-                    </div>
-                    <audio className="mt-4 h-9 w-full" controls src={outputUrl}>
-                      <track kind="captions" srcLang="en" label="Generated sound clip" />
-                      Your browser does not support audio playback.
-                    </audio>
-                  </div>
-                )}
-
-                {stage === 'done' && outputUrl ? (
-                  <Button
-                    className="mt-5 h-12 w-full rounded-xl text-sm font-black shadow-[0_12px_30px_rgba(88,101,242,.3)]"
-                    render={<a href={outputUrl} download={`${outputName || 'soundboard-clip'}.mp3`} aria-label="Download generated MP3"><span className="sr-only">Download generated MP3</span></a>}
-                  >
-                    <Download /> Download MP3
-                  </Button>
-                ) : (
-                  <Button
-                    className="mt-5 h-12 w-full rounded-xl text-sm font-black shadow-[0_12px_30px_rgba(88,101,242,.3)]"
-                    onClick={convert}
-                    disabled={!duration || isBusy || clipDuration <= 0 || clipDuration > MAX_CLIP_SECONDS}
-                  >
-                    <Scissors /> {isBusy ? 'Working…' : 'Create MP3'}
-                  </Button>
-                )}
-
-                <div className="mt-5 grid grid-cols-3 gap-2">
-                  {[
-                    ['Length', '≤ 5 sec'],
-                    ['Size', '< 512 KB'],
-                    ['Format', 'MP3'],
-                  ].map(([label, value]) => (
-                    <div className="rounded-xl border border-white/8 bg-white/[.025] px-2 py-3 text-center" key={label}>
-                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</p>
-                      <p className="mt-1 text-xs font-bold text-[#dce0f4]">{value}</p>
-                    </div>
-                  ))}
-                </div>
-              </section>
-
-              <div className="flex items-center justify-center gap-2 text-center text-xs text-[#747b94]">
-                <LockKeyhole className="size-3.5" /> Your file never leaves this browser
+            <div className={`arcade-workspace ${isAudioFile ? 'is-audio' : ''}`}>
+              <div className="arcade-media">
+                <video ref={videoRef} src={fileUrl} className={isAudioFile ? 'sr-only' : 'arcade-video'} playsInline preload="metadata" onLoadedMetadata={(event) => { const nextDuration = event.currentTarget.duration; if (!Number.isFinite(nextDuration) || nextDuration < 0.1) { setError('This file has an invalid duration.'); return; } setDuration(nextDuration); setSelection({ start: 0, end: Math.min(MAX_CLIP_SECONDS, nextDuration) }); }}>
+                  <track kind="captions" srcLang="en" label="User-provided media" />
+                </video>
+                {!isAudioFile && <button type="button" className="arcade-video-play" aria-label={isPlaying ? 'Pause selected clip' : 'Play selected clip'} onClick={togglePreview}>{isPlaying ? <Pause /> : <Play />}</button>}
               </div>
-            </aside>
-          </div>
+              <div className="arcade-timeline">
+                <div className="arcade-timeline-heading"><h2>Choose your moment</h2><span><b>{clipDuration.toFixed(2)}</b> sec selected <em>/ 5 sec max</em></span></div>
+                {!duration && <div className="arcade-wave-skeleton" />}
+                <div ref={waveformRef} className={duration ? 'arcade-waveform' : 'hidden'} aria-label="Audio waveform with draggable trim handles" />
+                <div className="arcade-ruler" aria-hidden="true"><span>{formatTime(0)}</span><span>{formatTime(duration / 2)}</span><span>{formatTime(duration)}</span></div>
+                <div className="arcade-trim-controls">
+                  <Button className="arcade-preview-button" onClick={togglePreview} disabled={!duration}>{isPlaying ? <Pause /> : <Play />} {isPlaying ? 'Pause preview' : 'Preview selection'}</Button>
+                  <div className="arcade-time-fields">
+                    <label htmlFor="clip-start"><span>Start</span><div><Input id="clip-start" type="number" min={0} max={Math.max(0, selection.end - 0.1)} step={0.01} value={selection.start.toFixed(2)} onChange={(event) => updateBoundary('start', event.target.value)} /><span>sec</span></div></label>
+                    <span className="arcade-time-arrow">→</span>
+                    <label htmlFor="clip-end"><span>End</span><div><Input id="clip-end" type="number" min={selection.start + 0.1} max={duration} step={0.01} value={selection.end.toFixed(2)} onChange={(event) => updateBoundary('end', event.target.value)} /><span>sec</span></div></label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="arcade-finishing">
+              <span>Finishing touches</span>
+              <div id="normalize-label" className="arcade-switch-row"><Switch checked={normalize} onCheckedChange={(checked) => { setNormalize(checked); resetOutput(); }} aria-labelledby="normalize-label" /><Sparkles /> Normalize volume</div>
+              <div id="fade-label" className="arcade-switch-row"><Switch checked={fade} onCheckedChange={(checked) => { setFade(checked); resetOutput(); }} aria-labelledby="fade-label" /><Music2 /> Fade edges</div>
+            </div>
+            {isBusy && <div className="arcade-progress" aria-live="polite"><div><span>{stage === 'loading' ? 'Preparing audio engine…' : 'Creating your MP3…'}</span><b>{Math.round(progress)}%</b></div><Progress value={progress} /></div>}
+            {error && <div className="arcade-alert arcade-editor-alert" role="alert"><CircleAlert /> {error}</div>}
+            {stage === 'done' && outputUrl && <div className="arcade-success"><div><span><Check /> Discord-ready</span><small>{clipDuration.toFixed(2)} sec · {formatBytes(outputSize)} · MP3</small></div><audio controls src={outputUrl}><track kind="captions" srcLang="en" label="Generated sound clip" />Your browser does not support audio playback.</audio></div>}
+            <footer className="arcade-export">
+              <label htmlFor="output-name"><span>Save as</span><div className="arcade-name-field"><input id="output-name" value={outputName} onChange={(event) => setOutputName(safeName(event.target.value))} aria-label="Output file name" /><span>.mp3</span></div></label>
+              <div className="arcade-output-summary"><span><b>{clipDuration.toFixed(2)} sec</b> · MP3</span><small>{stage === 'done' ? formatBytes(outputSize) : `Est. ${Math.ceil(clipDuration * 16 + 1)} KB`} / 512 KB max</small></div>
+              {stage === 'done' && outputUrl ? (
+                <Button className="arcade-create-button" render={<a href={outputUrl} download={`${outputName || 'soundboard-clip'}.mp3`} aria-label="Download generated MP3"><span className="sr-only">Download generated MP3</span></a>}><Download /> Download MP3</Button>
+              ) : (
+                <Button className="arcade-create-button" onClick={convert} disabled={!duration || isBusy || clipDuration <= 0 || clipDuration > MAX_CLIP_SECONDS}><Scissors /> {isBusy ? 'Working…' : 'Create MP3'}</Button>
+              )}
+            </footer>
+          </section>
+          <p className="arcade-local-note"><LockKeyhole /> Your file never leaves this browser</p>
         </section>
       )}
-
-      <footer className="mx-auto flex w-full max-w-7xl items-center justify-center gap-2 border-t border-white/6 px-5 py-5 text-xs text-[#666d88] sm:px-8">
-        <span>Made for quick reactions, questionable timing, and good friends.</span>
-      </footer>
     </main>
   );
 }
