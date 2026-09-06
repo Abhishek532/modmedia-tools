@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
-import RegionsPlugin, { type Region } from 'wavesurfer.js/dist/plugins/regions.esm.js';
 import {
   Check,
   CircleAlert,
@@ -58,6 +57,7 @@ export default function Home() {
   const [fileUrl, setFileUrl] = useState('');
   const [duration, setDuration] = useState(0);
   const [selection, setSelection] = useState({ start: 0, end: 5 });
+  const [playhead, setPlayhead] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [normalize, setNormalize] = useState(true);
@@ -71,8 +71,8 @@ export default function Home() {
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const waveformRef = useRef<HTMLDivElement>(null);
+  const timelineRef = useRef<HTMLDivElement>(null);
   const wavesurferRef = useRef<WaveSurfer | null>(null);
-  const regionRef = useRef<Region | null>(null);
   const ffmpegRef = useRef<import('@ffmpeg/ffmpeg').FFmpeg | null>(null);
   const selectionRef = useRef(selection);
   const isAudioFile = file?.name.toLowerCase().endsWith('.mp3') || file?.type === 'audio/mpeg';
@@ -103,73 +103,28 @@ export default function Home() {
   useEffect(() => {
     if (!fileUrl || !duration || !waveformRef.current || !videoRef.current) return;
 
-    const regions = RegionsPlugin.create();
     const wavesurfer = WaveSurfer.create({
       container: waveformRef.current,
       media: videoRef.current,
       url: fileUrl,
       height: 108,
       waveColor: '#71667c',
-      progressColor: '#fa6377',
-      cursorColor: '#ffe4e9',
-      cursorWidth: 4,
+      progressColor: '#71667c',
+      cursorWidth: 0,
       barWidth: 3,
       barGap: 3,
       barRadius: 2,
       barMinHeight: 2,
       normalize: true,
-      dragToSeek: true,
-      plugins: [regions],
+      interact: false,
     });
 
     wavesurferRef.current = wavesurfer;
-    wavesurfer.on('ready', (readyDuration) => {
-      const end = Math.min(MAX_CLIP_SECONDS, readyDuration);
-      const region = regions.addRegion({
-        start: 0,
-        end,
-        minLength: 0.1,
-        maxLength: MAX_CLIP_SECONDS,
-        color: 'rgba(250, 99, 119, .18)',
-        // The selection can be repositioned as a whole, while its two edges trim it.
-        // Seeking remains on the waveform itself via WaveSurfer's playhead.
-        drag: true,
-        resize: true,
-      });
-      regionRef.current = region;
-      setSelection({ start: 0, end });
-    });
-    regions.on('region-update', (region, side) => {
-      // WaveSurfer clamps a region's leading/trailing edge independently when a
-      // dragged range hits the timeline boundary. Restore the user-selected
-      // duration and clamp the whole range instead, so it never shrinks.
-      if (!side) {
-        const previous = selectionRef.current;
-        const clipLength = previous.end - previous.start;
-        const start = Math.max(0, Math.min(region.start, duration - clipLength));
-        const next = { start, end: start + clipLength };
-        region.setOptions(next);
-        selectionRef.current = next;
-        setSelection(next);
-      } else {
-        const next = { start: region.start, end: region.end };
-        selectionRef.current = next;
-        setSelection(next);
-      }
-      resetOutput();
-    });
-    regions.on('region-clicked', (_region, event) => {
-      // The selected range overlays the waveform. Let a click on that overlay
-      // seek just like a click on the uncovered waveform, without affecting
-      // range dragging (which only starts after the drag threshold).
-      const bounds = wavesurfer.getWrapper().getBoundingClientRect();
-      const progress = Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width));
-      wavesurfer.setTime(progress * wavesurfer.getDuration());
-    });
     wavesurfer.on('play', () => setIsPlaying(true));
     wavesurfer.on('pause', () => setIsPlaying(false));
     wavesurfer.on('finish', () => setIsPlaying(false));
     wavesurfer.on('timeupdate', (time) => {
+      setPlayhead(time);
       const current = selectionRef.current;
       if (time >= current.end && !videoRef.current?.paused) {
         wavesurfer.pause();
@@ -183,7 +138,6 @@ export default function Home() {
     return () => {
       wavesurfer.destroy();
       wavesurferRef.current = null;
-      regionRef.current = null;
     };
   }, [duration, fileUrl, resetOutput]);
 
@@ -241,9 +195,27 @@ export default function Home() {
     }
 
     const next = { start, end };
+    selectionRef.current = next;
     setSelection(next);
-    regionRef.current?.setOptions(next);
     resetOutput();
+  };
+
+  const seekTimeline = (clientX: number) => {
+    const timeline = timelineRef.current;
+    const wavesurfer = wavesurferRef.current;
+    if (!timeline || !wavesurfer || !duration) return;
+    const bounds = timeline.getBoundingClientRect();
+    const time = Math.max(0, Math.min(duration, ((clientX - bounds.left) / bounds.width) * duration));
+    wavesurfer.setTime(time);
+    setPlayhead(time);
+  };
+
+  const moveTrimHandle = (side: 'start' | 'end', clientX: number) => {
+    const timeline = timelineRef.current;
+    if (!timeline || !duration) return;
+    const bounds = timeline.getBoundingClientRect();
+    const time = Math.max(0, Math.min(duration, ((clientX - bounds.left) / bounds.width) * duration));
+    updateBoundary(side, String(time));
   };
 
   const togglePreview = () => {
@@ -253,7 +225,7 @@ export default function Home() {
       wavesurfer.pause();
     } else {
       wavesurfer.setTime(selection.start);
-      regionRef.current?.play(true);
+      wavesurfer.play(selection.start, selection.end);
     }
   };
 
@@ -423,9 +395,15 @@ export default function Home() {
               <div className="arcade-timeline">
                 <div className="arcade-timeline-heading"><h2>Choose your moment</h2><span><b>{clipDuration.toFixed(2)}</b> sec selected <em>/ 5 sec max</em></span></div>
                 {!duration && <div className="arcade-wave-skeleton" />}
-                <div ref={waveformRef} className={duration ? 'arcade-waveform' : 'hidden'} aria-label="Audio waveform. Click or drag to seek with the playback cursor; drag the two coral edge handles to set the clip start and end." />
+                <div ref={timelineRef} className={duration ? 'arcade-waveform-shell' : 'hidden'} onPointerDown={(event) => seekTimeline(event.clientX)} aria-label="Audio trim control">
+                  <div ref={waveformRef} className="arcade-waveform" aria-hidden="true" />
+                  <div className="arcade-trim-range" style={{ left: `${(selection.start / duration) * 100}%`, width: `${((selection.end - selection.start) / duration) * 100}%` }} aria-hidden="true" />
+                  <div className="arcade-playhead" style={{ left: `${(playhead / duration) * 100}%` }} aria-hidden="true" />
+                  <button type="button" className="arcade-trim-handle arcade-trim-start" style={{ left: `${(selection.start / duration) * 100}%` }} aria-label={`Trim start at ${formatTime(selection.start)}`} onPointerDown={(event) => { event.stopPropagation(); event.currentTarget.setPointerCapture(event.pointerId); moveTrimHandle('start', event.clientX); }} onPointerMove={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) moveTrimHandle('start', event.clientX); }} onPointerUp={(event) => event.currentTarget.releasePointerCapture(event.pointerId)} onKeyDown={(event) => { if (event.key === 'ArrowLeft') { event.preventDefault(); updateBoundary('start', String(selection.start - 0.1)); } if (event.key === 'ArrowRight') { event.preventDefault(); updateBoundary('start', String(selection.start + 0.1)); } }} />
+                  <button type="button" className="arcade-trim-handle arcade-trim-end" style={{ left: `${(selection.end / duration) * 100}%` }} aria-label={`Trim end at ${formatTime(selection.end)}`} onPointerDown={(event) => { event.stopPropagation(); event.currentTarget.setPointerCapture(event.pointerId); moveTrimHandle('end', event.clientX); }} onPointerMove={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) moveTrimHandle('end', event.clientX); }} onPointerUp={(event) => event.currentTarget.releasePointerCapture(event.pointerId)} onKeyDown={(event) => { if (event.key === 'ArrowLeft') { event.preventDefault(); updateBoundary('end', String(selection.end - 0.1)); } if (event.key === 'ArrowRight') { event.preventDefault(); updateBoundary('end', String(selection.end + 0.1)); } }} />
+                </div>
                 <div className="arcade-ruler" aria-hidden="true"><span>{formatTime(0)}</span><span>{formatTime(duration / 2)}</span><span>{formatTime(duration)}</span></div>
-                <p className="arcade-timeline-help"><span aria-hidden="true" />Click anywhere to seek. Drag the red range to reposition it, or its coral handles to trim.</p>
+                <p className="arcade-timeline-help"><span aria-hidden="true" />Click the waveform to preview a moment. Drag either handle to trim the clip.</p>
                 <div className="arcade-trim-controls">
                   <Button className="arcade-preview-button" onClick={togglePreview} disabled={!duration}>{isPlaying ? <Pause /> : <Play />} {isPlaying ? 'Pause preview' : 'Preview selection'}</Button>
                   <div className="arcade-time-fields">

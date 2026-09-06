@@ -334,15 +334,17 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-timeline-heading > span { color: #fa8b9a; font-family: var(--font-geist-mono), monospace; font-size: .8rem; }
 .arcade-timeline-heading b { font-size: 1.05rem; }
 .arcade-timeline-heading em { color: #b7aebf; font-size: .74rem; font-style: normal; }
-.arcade-waveform, .arcade-wave-skeleton { margin-top: 1rem; overflow: hidden; background: #19171f; border-radius: .45rem; }
-.arcade-waveform { height: 108px; }
+.arcade-waveform-shell, .arcade-wave-skeleton { margin-top: 1rem; overflow: hidden; background: #19171f; border-radius: .45rem; }
+.arcade-waveform-shell { position: relative; height: 108px; touch-action: none; cursor: crosshair; }
+.arcade-waveform { position: absolute; inset: 0; height: 108px; pointer-events: none; }
 .arcade-wave-skeleton { min-height: 6.75rem; }
-.arcade-waveform ::part(region) { background: rgba(250, 99, 119, .18) !important; cursor: grab !important; }
-.arcade-waveform ::part(region):active { cursor: grabbing !important; }
-.arcade-waveform ::part(cursor) { z-index: 6 !important; width: 4px !important; background: #ffe4e9 !important; box-shadow: 0 0 0 1px #20131b, 0 0 12px rgba(255, 228, 233, .7); }
-.arcade-waveform ::part(region-handle) { width: 8px !important; background: #fa6377; box-shadow: 0 0 0 1px #20131b, 0 0 13px rgba(250, 99, 119, .55); }
-.arcade-waveform ::part(region-handle-left) { border-left: 2px solid #ffe4e9 !important; border-radius: 3px 0 0 3px !important; }
-.arcade-waveform ::part(region-handle-right) { border-right: 2px solid #ffe4e9 !important; border-radius: 0 3px 3px 0 !important; }
+.arcade-trim-range { position: absolute; z-index: 2; top: 0; bottom: 0; pointer-events: none; background: rgba(250, 99, 119, .22); border-inline: 1px solid #fa6377; }
+.arcade-playhead { position: absolute; z-index: 3; top: 0; bottom: 0; width: 3px; pointer-events: none; background: #f2f3f5; box-shadow: 0 0 0 1px #20131b, 0 0 10px rgba(242, 243, 245, .7); transform: translateX(-50%); }
+.arcade-playhead::before { position: absolute; top: 0; left: 50%; width: 10px; height: 10px; content: ''; background: #f2f3f5; border-radius: 0 0 5px 5px; transform: translateX(-50%); }
+.arcade-trim-handle { position: absolute; z-index: 4; top: -4px; bottom: -4px; width: 16px; padding: 0; cursor: ew-resize; background: transparent; border: 0; transform: translateX(-50%); touch-action: none; }
+.arcade-trim-handle::before { position: absolute; top: 0; bottom: 0; left: 6px; width: 4px; content: ''; background: #fa6377; border: 1px solid #ffe4e9; border-radius: 4px; box-shadow: 0 0 10px rgba(250, 99, 119, .65); }
+.arcade-trim-handle::after { position: absolute; top: -1px; left: 2px; width: 12px; height: 8px; content: ''; background: #fa6377; border: 1px solid #ffe4e9; border-radius: 3px; box-shadow: 0 0 8px rgba(250, 99, 119, .55); }
+.arcade-trim-handle:focus-visible { outline: 2px solid #f2f3f5; outline-offset: 3px; }
 .arcade-wave-skeleton { animation: arcade-pulse 1.4s ease-in-out infinite; }
 @keyframes arcade-pulse { 50% { opacity: .55; } }
 .arcade-ruler { display: flex; justify-content: space-between; padding: .55rem 0 1.1rem; color: #b7aebf; font-family: var(--font-geist-mono), monospace; font-size: .72rem; }
