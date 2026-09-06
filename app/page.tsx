@@ -131,9 +131,9 @@ export default function Home() {
         minLength: 0.1,
         maxLength: MAX_CLIP_SECONDS,
         color: 'rgba(250, 99, 119, .18)',
-        // The selection is fixed in place: only its two edge handles trim it.
+        // The selection can be repositioned as a whole, while its two edges trim it.
         // Seeking remains on the waveform itself via WaveSurfer's playhead.
-        drag: false,
+        drag: true,
         resize: true,
       });
       regionRef.current = region;
@@ -402,7 +402,7 @@ export default function Home() {
                 {!duration && <div className="arcade-wave-skeleton" />}
                 <div ref={waveformRef} className={duration ? 'arcade-waveform' : 'hidden'} aria-label="Audio waveform. Click or drag to seek with the playback cursor; drag the two coral edge handles to set the clip start and end." />
                 <div className="arcade-ruler" aria-hidden="true"><span>{formatTime(0)}</span><span>{formatTime(duration / 2)}</span><span>{formatTime(duration)}</span></div>
-                <p className="arcade-timeline-help"><span aria-hidden="true" />Drag the two coral handles to trim. Click or drag anywhere on the waveform to move the playback cursor.</p>
+                <p className="arcade-timeline-help"><span aria-hidden="true" />Drag the red range to reposition it, its coral handles to trim, or the waveform to move the playback cursor.</p>
                 <div className="arcade-trim-controls">
                   <Button className="arcade-preview-button" onClick={togglePreview} disabled={!duration}>{isPlaying ? <Pause /> : <Play />} {isPlaying ? 'Pause preview' : 'Preview selection'}</Button>
                   <div className="arcade-time-fields">
