@@ -150,7 +150,7 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
   border-bottom: 1px solid #34303c;
 }
 
-.arcade-brand, .arcade-private, .arcade-file-row, .arcade-finishing,
+.arcade-brand, .arcade-private, .arcade-file-row,
 .arcade-trim-controls, .arcade-export, .arcade-success, .arcade-progress > div {
   display: flex;
   align-items: center;
@@ -342,7 +342,7 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-waveform-shell { position: relative; height: 108px; touch-action: none; cursor: default; }
 .arcade-waveform { position: absolute; inset: 0; height: 108px; pointer-events: none; }
 .arcade-wave-skeleton { min-height: 6.75rem; }
-.arcade-trim-range { position: absolute; z-index: 2; top: 0; bottom: 0; cursor: grab; background: rgba(250, 99, 119, .22); border-inline: 1px solid #fa6377; touch-action: none; }
+.arcade-trim-range { position: absolute; z-index: 2; top: 0; bottom: 0; cursor: grab; background: rgba(250, 99, 119, .18); border-inline: 4px solid #fa6377; touch-action: none; }
 .arcade-trim-range:active { cursor: grabbing; }
 .arcade-playhead { position: absolute; z-index: 3; top: 0; bottom: 0; width: 3px; pointer-events: none; background: #f2f3f5; box-shadow: 0 0 0 1px #20131b, 0 0 10px rgba(242, 243, 245, .7); transform: translateX(-50%); }
 .arcade-playhead::before { position: absolute; top: 0; left: 50%; width: 10px; height: 10px; content: ''; background: #f2f3f5; border-radius: 0 0 5px 5px; transform: translateX(-50%); }
@@ -354,21 +354,14 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 @keyframes arcade-pulse { 50% { opacity: .55; } }
 .arcade-ruler { display: flex; justify-content: space-between; padding: .55rem 0 1.1rem; color: #b7aebf; font-family: var(--font-geist-mono), monospace; font-size: .72rem; }
 .arcade-timeline-help { margin: .45rem 0 .85rem; color: #b7aebf; font-size: .77rem; line-height: 1.4; }
-.arcade-trim-controls { justify-content: flex-start; gap: 1rem; flex-wrap: wrap; }
-.arcade-preview-button { width: 2.75rem; min-width: 2.75rem; height: 2.75rem; padding: 0; color: #ffb3be; background: #33252f; border: 1px solid #704150; }
+.arcade-trim-controls { justify-content: flex-start; gap: 1.1rem; flex-wrap: wrap; }
+.arcade-preview-button { width: 2.75rem; min-width: 2.75rem; height: 2.75rem; padding: 0; color: #20131b; background: #fa6377; border: 0; border-radius: 50%; }
 .arcade-preview-button svg { width: 1.05rem; height: 1.05rem; }
-.arcade-time-fields { margin-left: auto; }
-.arcade-time-fields { display: flex; align-items: end; gap: .65rem; }
+.arcade-time-fields { display: flex; align-items: end; gap: 1rem; margin-left: auto; }
 .arcade-time-fields label > span { display: block; color: #b7aebf; font-size: .72rem; }
-.arcade-time-fields label > div { display: flex; align-items: center; width: 7.2rem; margin-top: .32rem; background: #1b1822; border: 1px solid #554c61; border-radius: .42rem; }
-.arcade-time-fields input { min-width: 0; height: 2.6rem; color: #f7f2e8; background: transparent; border: 0; font-family: var(--font-geist-mono), monospace; font-size: 1rem; }
-.arcade-time-fields label > div > span { padding-right: .65rem; color: #b7aebf; font-size: .7rem; }
-.arcade-time-arrow { padding-bottom: .7rem; color: #b7aebf; }
-
-.arcade-finishing { gap: 1.2rem; flex-wrap: wrap; padding: 1rem 1.25rem; border-top: 1px solid #453e4e; }
-.arcade-finishing > span { margin-right: auto; color: #b7aebf; font-size: .78rem; }
-.arcade-switch-row { display: flex; align-items: center; gap: .5rem; color: #ece5ef; font-size: .88rem; }
-.arcade-switch-row svg { width: .9rem; color: #fa8b9a; }
+.arcade-time-fields input { width: 6rem; min-width: 0; height: 2.35rem; padding: .3rem 0; color: #f7f2e8; background: transparent; border: 0; border-bottom: 1px solid #706477; border-radius: 0; font-family: var(--font-geist-mono), monospace; font-size: 1rem; }
+.arcade-time-fields input:focus { border-bottom-color: #fa6377; box-shadow: none; }
+.arcade-precision-help { margin: .7rem 0 0; color: #9d94a6; font-size: .72rem; text-align: right; }
 
 .arcade-progress { margin: 1rem 1.25rem 0; padding: .8rem; background: #1d1a23; border: 1px solid #453e4e; border-radius: .5rem; }
 .arcade-progress > div { justify-content: space-between; margin-bottom: .6rem; font-size: .8rem; }
@@ -416,7 +409,6 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
   .arcade-specs span + span { border-top: 1px solid #453e4e; border-left: 0; }
   .arcade-time-fields { width: 100%; gap: .35rem; }
   .arcade-time-fields label { min-width: 0; flex: 1; }
-  .arcade-time-fields label > div { width: 100%; }
+  .arcade-time-fields input { width: 100%; }
   .arcade-time-arrow { font-size: .8rem; }
-  .arcade-finishing > span { width: 100%; }
 }

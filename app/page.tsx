@@ -12,14 +12,12 @@ import {
   Pause,
   Play,
   Scissors,
-  Sparkles,
   UploadCloud,
   WandSparkles,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
-import { Switch } from '@/components/ui/switch';
 
 const MAX_FILE_BYTES = 250 * 1024 * 1024;
 const MAX_CLIP_SECONDS = 5;
@@ -60,8 +58,6 @@ export default function Home() {
   const [showPlayhead, setShowPlayhead] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [normalize, setNormalize] = useState(true);
-  const [fade, setFade] = useState(true);
   const [outputName, setOutputName] = useState('soundboard-clip');
   const [stage, setStage] = useState<Stage>('idle');
   const [progress, setProgress] = useState(0);
@@ -309,16 +305,6 @@ export default function Home() {
       setProgress(42);
 
       const clipDuration = Math.min(MAX_CLIP_SECONDS, selection.end - selection.start);
-      const filters: string[] = [];
-      if (normalize) filters.push('loudnorm=I=-16:TP=-1.5:LRA=11');
-      if (fade) {
-        const fadeLength = Math.min(0.08, clipDuration / 3);
-        filters.push(
-          `afade=t=in:st=0:d=${fadeLength.toFixed(3)}`,
-          `afade=t=out:st=${Math.max(0, clipDuration - fadeLength).toFixed(3)}:d=${fadeLength.toFixed(3)}`,
-        );
-      }
-
       const args = [
         '-ss',
         selection.start.toFixed(3),
@@ -338,7 +324,6 @@ export default function Home() {
         '-b:a',
         '128k',
       ];
-      if (filters.length) args.push('-af', filters.join(','));
       args.push('-id3v2_version', '3', 'output.mp3');
 
       const exitCode = await ffmpeg.exec(args);
@@ -416,7 +401,7 @@ export default function Home() {
               </div>
               <div className="arcade-timeline">
                 <div className="arcade-timeline-heading"><h2>Choose your moment</h2></div>
-                <p className="arcade-timeline-help">Drag the red range to reposition it. Drag either coral handle to trim. Preview plays the selected clip.</p>
+                <p className="arcade-timeline-help">Drag the selection to move your clip. Use the two handles to trim.</p>
                 {!duration && <div className="arcade-wave-skeleton" />}
                 <div ref={timelineRef} className={duration ? 'arcade-waveform-shell' : 'hidden'} aria-label="Audio trim control">
                   <div ref={waveformRef} className="arcade-waveform" aria-hidden="true" />
@@ -430,23 +415,18 @@ export default function Home() {
                   <Button className="arcade-preview-button" onClick={togglePreview} disabled={!duration} aria-label={isPlaying ? 'Pause selected clip' : 'Play selected clip'}>{isPlaying ? <Pause /> : <Play />}</Button>
                   <div className="arcade-duration-status"><span className="arcade-selected-duration"><b>{clipDuration.toFixed(2)}</b> sec selected</span><i>/</i><em><b>5.00</b> sec max</em></div>
                   <div className="arcade-time-fields">
-                    <label htmlFor="clip-start"><span>Start</span><div><Input id="clip-start" type="number" min={0} max={Math.max(0, selection.end - 0.1)} step={0.01} value={selection.start.toFixed(2)} onChange={(event) => updateBoundary('start', event.target.value)} /><span>sec</span></div></label>
-                    <span className="arcade-time-arrow">→</span>
-                    <label htmlFor="clip-end"><span>End</span><div><Input id="clip-end" type="number" min={selection.start + 0.1} max={duration} step={0.01} value={selection.end.toFixed(2)} onChange={(event) => updateBoundary('end', event.target.value)} /><span>sec</span></div></label>
+                    <label htmlFor="clip-start"><span>Start · sec</span><Input id="clip-start" type="number" min={0} max={Math.max(0, selection.end - 0.1)} step={0.01} value={selection.start.toFixed(2)} onChange={(event) => updateBoundary('start', event.target.value)} /></label>
+                    <label htmlFor="clip-end"><span>End · sec</span><Input id="clip-end" type="number" min={selection.start + 0.1} max={duration} step={0.01} value={selection.end.toFixed(2)} onChange={(event) => updateBoundary('end', event.target.value)} /></label>
                   </div>
                 </div>
+                <p className="arcade-precision-help">Edit the times for a precise trim.</p>
               </div>
-            </div>
-            <div className="arcade-finishing">
-              <span>Finishing touches</span>
-              <div id="normalize-label" className="arcade-switch-row"><Switch checked={normalize} onCheckedChange={(checked) => { setNormalize(checked); resetOutput(); }} aria-labelledby="normalize-label" /><Sparkles /> Normalize volume</div>
-              <div id="fade-label" className="arcade-switch-row"><Switch checked={fade} onCheckedChange={(checked) => { setFade(checked); resetOutput(); }} aria-labelledby="fade-label" /><Music2 /> Fade edges</div>
             </div>
             {isBusy && <div className="arcade-progress" aria-live="polite"><div><span>{stage === 'loading' ? 'Preparing audio engine…' : 'Creating your MP3…'}</span><b>{Math.round(progress)}%</b></div><Progress value={progress} /></div>}
             {error && <div className="arcade-alert arcade-editor-alert" role="alert"><CircleAlert /> {error}</div>}
             {stage === 'done' && outputUrl && <div className="arcade-success"><div><span><Check /> Discord-ready</span><small>{clipDuration.toFixed(2)} sec · {formatBytes(outputSize)} · MP3</small></div><audio controls src={outputUrl}><track kind="captions" srcLang="en" label="Generated sound clip" />Your browser does not support audio playback.</audio></div>}
             <footer className="arcade-export">
-              <label htmlFor="output-name"><span>Save as</span><div className="arcade-name-field"><input id="output-name" value={outputName} onChange={(event) => setOutputName(safeName(event.target.value))} aria-label="Output file name" /><span>.mp3</span></div></label>
+              <label htmlFor="output-name"><span>File name</span><div className="arcade-name-field"><input id="output-name" value={outputName} onChange={(event) => setOutputName(safeName(event.target.value))} aria-label="Output file name" /><span>.mp3</span></div></label>
               <div className="arcade-output-summary"><span><b>{clipDuration.toFixed(2)} sec</b> · MP3</span><small>{stage === 'done' ? formatBytes(outputSize) : `Est. ${Math.ceil(clipDuration * 16 + 1)} KB`} / 512 KB max</small></div>
               {stage === 'done' && outputUrl ? (
                 <Button className="arcade-create-button" render={<a href={outputUrl} download={`${outputName || 'soundboard-clip'}.mp3`} aria-label="Download generated MP3"><span className="sr-only">Download generated MP3</span></a>}><Download /> Download MP3</Button>
