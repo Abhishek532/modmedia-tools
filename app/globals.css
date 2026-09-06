@@ -361,7 +361,6 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-time-fields label > span { display: block; color: #b7aebf; font-size: .72rem; }
 .arcade-time-fields input { width: 6rem; min-width: 0; height: 2.35rem; padding: .3rem 0; color: #f7f2e8; background: transparent; border: 0; border-bottom: 1px solid #706477; border-radius: 0; font-family: var(--font-geist-mono), monospace; font-size: 1rem; }
 .arcade-time-fields input:focus { border-bottom-color: #fa6377; box-shadow: none; }
-.arcade-precision-help { margin: .7rem 0 0; color: #9d94a6; font-size: .72rem; text-align: right; }
 
 .arcade-progress { margin: 1rem 1.25rem 0; padding: .8rem; background: #1d1a23; border: 1px solid #453e4e; border-radius: .5rem; }
 .arcade-progress > div { justify-content: space-between; margin-bottom: .6rem; font-size: .8rem; }

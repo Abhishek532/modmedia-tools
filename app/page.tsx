@@ -419,7 +419,6 @@ export default function Home() {
                     <label htmlFor="clip-end"><span>End · sec</span><Input id="clip-end" type="number" min={selection.start + 0.1} max={duration} step={0.01} value={selection.end.toFixed(2)} onChange={(event) => updateBoundary('end', event.target.value)} /></label>
                   </div>
                 </div>
-                <p className="arcade-precision-help">Edit the times for a precise trim.</p>
               </div>
             </div>
             {isBusy && <div className="arcade-progress" aria-live="polite"><div><span>{stage === 'loading' ? 'Preparing audio engine…' : 'Creating your MP3…'}</span><b>{Math.round(progress)}%</b></div><Progress value={progress} /></div>}
