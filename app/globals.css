@@ -332,7 +332,7 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-timeline-heading h2 { margin: 0; font-size: .94rem; font-weight: 700; }
 .arcade-timeline-heading > span { display: flex; align-items: baseline; gap: .42rem; font-family: var(--font-geist-mono), monospace; }
 .arcade-selected-duration { color: #c8c0cf; font-size: .72rem; }
-.arcade-selected-duration b { color: #fa8b9a; font-size: .88rem; }
+.arcade-selected-duration b { color: #c8c0cf; font-size: .88rem; }
 .arcade-timeline-heading i { color: #83798b; font-size: .78rem; font-style: normal; }
 .arcade-timeline-heading em { color: #ffe4e9; font-size: .94rem; font-style: normal; font-weight: 700; letter-spacing: .01em; }
 .arcade-timeline-heading em b { font-size: 1.12rem; }
