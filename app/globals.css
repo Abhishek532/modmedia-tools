@@ -302,7 +302,6 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-editor-intro { display: flex; align-items: end; justify-content: space-between; gap: 1.5rem; margin-bottom: 1.6rem; }
 .arcade-editor-intro h1 { font-size: clamp(2rem, 4vw, 3.2rem); }
 .arcade-editor-intro > div > p:last-child { margin-top: .65rem; }
-.arcade-start-over { min-height: 2.5rem; flex: none; color: #c8c0cf; background: #24212b; border-color: #554c61; }
 
 .arcade-editor-shell {
   overflow: hidden;
@@ -319,6 +318,7 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-file-details b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .94rem; }
 .arcade-file-details small { display: block; margin-top: .2rem; color: #b7aebf; font-size: .75rem; }
 .arcade-replace { padding: .52rem .72rem; cursor: pointer; border: 1px solid #704150; border-radius: .35rem; font-size: .75rem; }
+.arcade-replace-primary { min-height: 2.5rem; align-content: center; flex: none; color: #ffd9df; }
 
 .arcade-workspace { display: grid; grid-template-columns: minmax(12rem, .65fr) minmax(0, 1.35fr); gap: 1.25rem; padding: 1.25rem; }
 .arcade-workspace.is-audio { display: block; }
@@ -331,9 +331,10 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-timeline { min-width: 0; }
 .arcade-timeline-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
 .arcade-timeline-heading h2 { margin: 0; font-size: .94rem; font-weight: 700; }
-.arcade-timeline-heading > span { color: #fa8b9a; font-family: var(--font-geist-mono), monospace; font-size: .8rem; }
-.arcade-timeline-heading b { font-size: 1.05rem; }
-.arcade-timeline-heading em { color: #b7aebf; font-size: .74rem; font-style: normal; }
+.arcade-timeline-heading > span { display: flex; align-items: center; gap: .6rem; font-family: var(--font-geist-mono), monospace; }
+.arcade-selected-duration { color: #c8c0cf; font-size: .72rem; }
+.arcade-selected-duration b { color: #fa8b9a; font-size: .88rem; }
+.arcade-timeline-heading em { padding: .28rem .5rem; color: #ffe4e9; background: #59303c; border: 1px solid #a94759; border-radius: .3rem; font-size: .86rem; font-style: normal; font-weight: 700; letter-spacing: .01em; }
 .arcade-waveform-shell, .arcade-wave-skeleton { margin-top: 1rem; overflow: hidden; background: #19171f; border-radius: .45rem; }
 .arcade-waveform-shell { position: relative; height: 108px; touch-action: none; cursor: default; }
 .arcade-waveform { position: absolute; inset: 0; height: 108px; pointer-events: none; }
