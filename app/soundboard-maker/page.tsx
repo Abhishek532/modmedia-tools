@@ -398,7 +398,7 @@ export default function Home() {
 
   const clipDuration = Math.max(0, selection.end - selection.start);
   const isBusy = stage === 'loading' || stage === 'converting';
-  const volumePercent = ((volumeDb + 6) / 12) * 100;
+  const volumePercent = ((volumeDb + 12) / 24) * 100;
   const volumeStyle = {
     '--volume-start': `${Math.min(50, volumePercent)}%`,
     '--volume-end': `${Math.max(50, volumePercent)}%`,
@@ -472,8 +472,8 @@ export default function Home() {
                     <div className="arcade-volume-track-wrap">
                       <Slider
                         className="arcade-volume-slider"
-                        min={-6}
-                        max={6}
+                        min={-12}
+                        max={12}
                         step={1}
                         value={[volumeDb]}
                         onValueChange={(value) => {
@@ -484,7 +484,7 @@ export default function Home() {
                         style={volumeStyle}
                       />
                       <div className="arcade-volume-scale" aria-hidden="true">
-                        <span>−6 dB</span><span>−4 dB</span><span>−2 dB</span><span className="is-default">0 dB<small>Default</small></span><span>+2 dB</span><span>+4 dB</span><span>+6 dB</span>
+                        <span>−12 dB</span><span>−8 dB</span><span>−4 dB</span><span className="is-default">0 dB<small>Default</small></span><span>+4 dB</span><span>+8 dB</span><span>+12 dB</span>
                       </div>
                     </div>
                     <span className="arcade-volume-direction">Louder</span>
