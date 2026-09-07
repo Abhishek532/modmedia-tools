@@ -366,20 +366,20 @@ export default function Home() {
   return (
     <main className="arcade-app">
       <header className="arcade-header">
-        <button className="arcade-brand" onClick={clearFile} type="button" aria-label="SoundSlice home"><span className="arcade-monogram">SS</span><span>SoundSlice</span></button>
-        <span className="arcade-private"><LockKeyhole /> Files stay on your device</span>
+        <button className="arcade-brand" onClick={clearFile} type="button" aria-label="SoundSlice home"><span className="arcade-monogram">SS</span><span className="arcade-brand-copy"><span>SoundSlice</span><small>Soundboard maker</small></span></button>
+        <span className="arcade-private"><span className="arcade-private-dot" aria-hidden="true" /> Local processing</span>
       </header>
       {!file ? (
         <section className="arcade-upload-page">
-          <div className="arcade-upload-intro"><p className="arcade-eyebrow">Discord soundboard clip maker</p><h1>Your next soundboard hit.</h1><p>Trim an MP4 or MP3 to five seconds, tune the sound, and download a Discord-ready MP3.</p></div>
+          <div className="arcade-upload-intro"><h1>Every tool you need for Discord-ready media, in one place.</h1><p>Fast, free tools for soundboards, stickers, emojis, icons, GIFs, and video. Trim, resize, compress, convert, and export in just a few clicks.</p></div>
           <div className={`arcade-drop-shell ${isDragging ? 'is-dragging' : ''}`} onDragEnter={(event) => { event.preventDefault(); setIsDragging(true); }} onDragLeave={(event) => { event.preventDefault(); if (event.currentTarget === event.target) setIsDragging(false); }} onDragOver={(event) => event.preventDefault()} onDrop={(event) => { event.preventDefault(); setIsDragging(false); acceptFile(event.dataTransfer.files[0]); }}>
             <label className="arcade-drop-zone">
               <input className="sr-only" type="file" accept="video/mp4,audio/mpeg,.mp4,.mp3" onChange={(event) => { acceptFile(event.target.files?.[0]); event.target.value = ''; }} />
-              <span className="arcade-upload-icon"><UploadCloud /></span><span className="arcade-drop-title">{isDragging ? 'Drop it here' : 'Drop an MP4 or MP3'}</span><span className="arcade-drop-copy">Drag a file here or choose one from your device</span><span className="arcade-choose-button">Choose file</span><span className="arcade-upload-limits">Up to 250 MB · processed locally</span>
+              <span className="arcade-drop-main"><span className="arcade-drop-message"><span className="arcade-drop-title">{isDragging ? 'Drop it here' : 'Start with Soundboard Maker'}</span><span className="arcade-drop-copy">Drop an MP4 or MP3 and turn the best five seconds into a server-ready sound.</span></span><span className="arcade-choose-button"><UploadCloud /> Choose a clip</span></span>
+              <span className="arcade-drop-meta"><span className="arcade-local-file"><LockKeyhole /> Your file stays on this device</span><span className="arcade-requirements"><span>Up to 250 MB</span><span>5 sec output</span><span>MP3</span></span></span>
             </label>
           </div>
           {error && <div className="arcade-alert" role="alert"><CircleAlert /> {error}</div>}
-          <div className="arcade-specs" aria-label="Output requirements"><span><b>5 sec</b><small>Maximum length</small></span><span><b>512 KB</b><small>Maximum size</small></span><span><b>MP3</b><small>Discord format</small></span></div>
         </section>
       ) : (
         <section className="arcade-editor-page">
