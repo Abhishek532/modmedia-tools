@@ -425,7 +425,7 @@ export default function Home() {
         <section className="arcade-editor-page">
           <Link className="arcade-back-link" href="/"><ArrowLeft /> All tools</Link>
           <div className="arcade-editor-intro">
-            <div><p className="arcade-eyebrow">Soundboard clip maker</p><h1>Your next soundboard hit.</h1><p>Find the moment. Keep the reaction.</p></div>
+            <div><h1>Soundboard Maker</h1><p>Trim an MP4 or MP3, adjust its volume, and download a Discord-ready sound.</p></div>
           </div>
           <section className="arcade-editor-shell">
             <div className="arcade-file-row">

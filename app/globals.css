@@ -200,16 +200,6 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-back-link:hover { color: #fa6377; }
 .arcade-back-link svg { width: .95rem; }
 
-.arcade-eyebrow {
-  margin: 0;
-  color: #fa8b9a;
-  font-family: var(--font-geist-mono), monospace;
-  font-size: .75rem;
-  font-weight: 700;
-  letter-spacing: .11em;
-  text-transform: uppercase;
-}
-
 .arcade-upload-intro h1, .arcade-editor-intro h1 {
   margin: 0;
   font-size: clamp(2.25rem, 6vw, 4.4rem);
@@ -226,7 +216,7 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
   font-size: 1rem;
   line-height: 1.65;
 }
-.arcade-editor-intro h1 { margin-top: .75rem; }
+.arcade-editor-intro h1 { margin-top: 0; }
 .arcade-editor-intro > div > p:last-child { max-width: 34rem; margin: 1.2rem 0 0; }
 
 .arcade-drop-shell {
