@@ -1,7 +1,7 @@
 'use client';
+/* oxlint-disable next/no-html-link-for-pages */
 
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
-import Link from 'next/link';
 import WaveSurfer from 'wavesurfer.js';
 import {
   ArrowLeft,
@@ -415,11 +415,11 @@ export default function Home() {
   return (
     <main className="arcade-app">
       <header className="arcade-header">
-        <Link className="arcade-brand" href="/" aria-label="SoundSlice home"><span className="arcade-monogram">SS</span><span className="arcade-brand-copy"><span>SoundSlice</span><small>Soundboard maker</small></span></Link>
+        <a className="arcade-brand" href="/" aria-label="SoundSlice home"><span className="arcade-monogram">SS</span><span className="arcade-brand-copy"><span>SoundSlice</span><small>Soundboard maker</small></span></a>
       </header>
       {!file ? (
         <section className="arcade-upload-page">
-          <Link className="arcade-back-link" href="/"><ArrowLeft /> All tools</Link>
+          <a className="arcade-back-link" href="/"><ArrowLeft /> All tools</a>
           <SoundboardHero />
           <div className={`arcade-drop-shell ${isDragging ? 'is-dragging' : ''}`} onDragEnter={(event) => { event.preventDefault(); setIsDragging(true); }} onDragLeave={(event) => { event.preventDefault(); if (event.currentTarget === event.target) setIsDragging(false); }} onDragOver={(event) => event.preventDefault()} onDrop={(event) => { event.preventDefault(); setIsDragging(false); acceptFile(event.dataTransfer.files[0]); }}>
             <label className="arcade-drop-zone" aria-label="Choose an MP4 or MP3 file">
@@ -431,7 +431,7 @@ export default function Home() {
         </section>
       ) : (
         <section className="arcade-editor-page">
-          <Link className="arcade-back-link" href="/"><ArrowLeft /> All tools</Link>
+          <a className="arcade-back-link" href="/"><ArrowLeft /> All tools</a>
           <SoundboardHero />
           <section className="arcade-editor-shell">
             <div className="arcade-file-row">
