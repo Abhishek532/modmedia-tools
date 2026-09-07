@@ -160,7 +160,11 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: -.025em;
+  cursor: pointer;
+  transition: color .16s ease;
 }
+.arcade-brand:hover { color: #ffb3be; }
+.arcade-brand:hover .arcade-monogram { background: #ff7c8e; }
 
 .arcade-brand-copy { display: grid; gap: .08rem; text-align: left; }
 .arcade-brand-copy small { color: #817889; font-size: .7rem; font-weight: 500; letter-spacing: 0; }
@@ -176,6 +180,7 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
   font-family: var(--font-geist-mono), monospace;
   font-size: .75rem;
   letter-spacing: -.08em;
+  transition: background-color .16s ease;
 }
 
 .arcade-private {
@@ -199,6 +204,9 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 
 .arcade-upload-page { padding: clamp(1.75rem, 4vw, 3rem) 0 3rem; }
 .arcade-upload-intro { max-width: 58rem; margin: 0 auto; text-align: center; }
+.arcade-back-link { display: inline-flex; align-items: center; gap: .4rem; margin-bottom: 1.35rem; color: #b7aebf; font-size: .8rem; font-weight: 650; cursor: pointer; transition: color .16s ease; }
+.arcade-back-link:hover { color: #fa6377; }
+.arcade-back-link svg { width: .95rem; }
 
 .arcade-eyebrow {
   margin: 0;

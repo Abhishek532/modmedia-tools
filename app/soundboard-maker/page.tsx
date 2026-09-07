@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import {
+  ArrowLeft,
   Check,
   CircleAlert,
   Download,
@@ -360,6 +361,7 @@ export default function Home() {
       </header>
       {!file ? (
         <section className="arcade-upload-page">
+          <a className="arcade-back-link" href="/"><ArrowLeft /> All tools</a>
           <div className="arcade-upload-intro"><h1>Soundboard Maker</h1><p>Drop an MP4 or MP3, trim it to five seconds, and download a Discord-ready sound.</p></div>
           <div className={`arcade-drop-shell ${isDragging ? 'is-dragging' : ''}`} onDragEnter={(event) => { event.preventDefault(); setIsDragging(true); }} onDragLeave={(event) => { event.preventDefault(); if (event.currentTarget === event.target) setIsDragging(false); }} onDragOver={(event) => event.preventDefault()} onDrop={(event) => { event.preventDefault(); setIsDragging(false); acceptFile(event.dataTransfer.files[0]); }}>
             <label className="arcade-drop-zone">
@@ -371,6 +373,7 @@ export default function Home() {
         </section>
       ) : (
         <section className="arcade-editor-page">
+          <a className="arcade-back-link" href="/"><ArrowLeft /> All tools</a>
           <div className="arcade-editor-intro">
             <div><p className="arcade-eyebrow">Soundboard clip maker</p><h1>Your next soundboard hit.</h1><p>Find the moment. Keep the reaction.</p></div>
           </div>
