@@ -177,13 +177,13 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
   letter-spacing: -.08em;
 }
 
-.arcade-private, .arcade-local-note {
+.arcade-private {
   gap: .45rem;
   color: #b7aebf;
   font-size: .75rem;
 }
 
-.arcade-private svg, .arcade-local-note svg { width: .9rem; }
+.arcade-private svg { width: .9rem; }
 
 .arcade-upload-page, .arcade-editor-page {
   width: min(100% - 2rem, 72rem);
@@ -255,7 +255,7 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-upload-icon svg { width: 2rem; height: 2rem; }
 .arcade-drop-title { margin-top: 1.25rem; font-size: 1.25rem; font-weight: 700; }
 .arcade-drop-copy { margin-top: .45rem; color: #b7aebf; font-size: .9rem; }
-.arcade-choose-button, .arcade-replace { color: #ffd9df; background: #352731; }
+.arcade-choose-button { color: #ffd9df; background: #352731; }
 
 .arcade-choose-button {
   margin-top: 1.6rem;
@@ -317,7 +317,17 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-file-details { min-width: 0; flex: 1; }
 .arcade-file-details b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .94rem; }
 .arcade-file-details small { display: block; margin-top: .2rem; color: #b7aebf; font-size: .75rem; }
-.arcade-replace { padding: .52rem .72rem; cursor: pointer; border: 1px solid #704150; border-radius: .35rem; font-size: .75rem; }
+.arcade-replace {
+  padding: .52rem .72rem;
+  color: #fa6377;
+  background: #352731;
+  cursor: pointer;
+  border: 1px solid #554c61;
+  border-radius: .35rem;
+  font-size: .75rem;
+  transition: color .16s ease, background-color .16s ease, border-color .16s ease;
+}
+.arcade-replace:hover { color: #ff8b9a; background: #47313e; border-color: #8c5360; }
 
 .arcade-workspace { display: grid; grid-template-columns: minmax(12rem, .65fr) minmax(0, 1.35fr); gap: 1.25rem; padding: 1.25rem; }
 .arcade-workspace.is-audio { display: block; }
@@ -387,7 +397,6 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-create-button { min-height: 3rem; color: #20131b; background: #fa6377; font-weight: 800; cursor: pointer; transition: background-color .16s ease, box-shadow .16s ease; }
 .arcade-create-button:not(:disabled):hover { background: #ff7c8e; box-shadow: 0 6px 18px rgba(250, 99, 119, .24); }
 .arcade-create-button svg { width: 1rem; }
-.arcade-local-note { justify-content: center; margin: 1.25rem 0 0; }
 
 @media (max-width: 700px) {
   .arcade-header, .arcade-upload-page, .arcade-editor-page { width: min(100% - 1.25rem, 72rem); }
