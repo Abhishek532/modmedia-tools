@@ -370,6 +370,11 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-waveform-shell, .arcade-wave-skeleton { margin-top: 1rem; overflow: hidden; background: #19171f; border-radius: .45rem; }
 .arcade-timeline-help + .arcade-waveform-shell,
 .arcade-timeline-help + .arcade-wave-skeleton { margin-top: 0; }
+.arcade-waveform-row { display: flex; align-items: center; gap: .8rem; }
+.arcade-waveform-column { min-width: 0; flex: 1; }
+.arcade-waveform-row .arcade-preview-button { align-self: flex-start; margin-top: 2rem; }
+.arcade-waveform-column .arcade-waveform-shell,
+.arcade-waveform-column .arcade-wave-skeleton { margin-top: 0; }
 .arcade-waveform-shell { position: relative; height: 108px; touch-action: none; cursor: default; }
 .arcade-waveform { position: absolute; inset: 0; height: 108px; pointer-events: none; }
 .arcade-wave-skeleton { min-height: 6.75rem; }
