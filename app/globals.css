@@ -186,6 +186,7 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-upload-page, .arcade-editor-page {
   width: min(100% - 2rem, 72rem);
   margin: 0 auto;
+  padding: clamp(1.75rem, 4vw, 3rem) 0 3rem;
 }
 
 .arcade-tools-page {
@@ -194,7 +195,6 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
   padding: clamp(1.75rem, 4vw, 3rem) 0 3rem;
 }
 
-.arcade-upload-page { padding: clamp(1.75rem, 4vw, 3rem) 0 3rem; }
 .arcade-upload-intro { max-width: 58rem; margin: 0 auto; text-align: center; }
 .arcade-back-link { display: inline-flex; align-items: center; gap: .4rem; margin-bottom: 1.35rem; color: #b7aebf; font-size: .8rem; font-weight: 650; cursor: pointer; transition: color .16s ease; }
 .arcade-back-link:hover { color: #fa6377; }
@@ -217,7 +217,7 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
   line-height: 1.65;
 }
 .arcade-editor-intro h1 { margin-top: 0; }
-.arcade-editor-intro > div > p:last-child { max-width: 34rem; margin: 1.2rem 0 0; }
+.arcade-editor-intro > div > p:last-child { max-width: 34rem; margin: 1.2rem auto 0; }
 
 .arcade-drop-shell {
   max-width: 47.5rem;
@@ -301,10 +301,9 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 }
 .arcade-alert svg { width: 1rem; flex: none; }
 
-.arcade-editor-page { padding: 2.5rem 0 3rem; }
-.arcade-editor-intro { display: flex; align-items: end; justify-content: space-between; gap: 1.5rem; margin-bottom: 1.6rem; }
+.arcade-editor-intro { margin-bottom: 1.6rem; text-align: center; }
 .arcade-editor-intro h1 { font-size: clamp(2rem, 4vw, 3.2rem); }
-.arcade-editor-intro > div > p:last-child { margin-top: .65rem; }
+.arcade-editor-intro > div > p:last-child { margin: .65rem auto 0; }
 
 .arcade-editor-shell {
   overflow: hidden;
@@ -435,7 +434,6 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
   .arcade-header, .arcade-upload-page, .arcade-editor-page, .arcade-tools-page { width: min(100% - 1.25rem, 72rem); }
   .arcade-drop-main { align-items: stretch; flex-direction: column; }
   .arcade-choose-button { width: 100%; }
-  .arcade-editor-intro { align-items: start; flex-direction: column; }
   .arcade-workspace { grid-template-columns: 1fr; }
   .arcade-media { min-height: 13rem; }
   .arcade-export { align-items: stretch; flex-direction: column; }
