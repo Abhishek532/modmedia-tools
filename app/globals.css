@@ -149,7 +149,7 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 }
 
 .arcade-brand, .arcade-file-row,
-.arcade-trim-controls, .arcade-export, .arcade-success, .arcade-progress > div {
+.arcade-trim-controls, .arcade-export {
   display: flex;
   align-items: center;
 }
@@ -419,18 +419,7 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-volume-scale span:nth-child(7) { left: 100%; transform: translateX(-100%); }
 .arcade-volume-scale span:nth-child(7)::before { right: 0; left: auto; transform: none; }
 
-.arcade-progress { margin: 1rem 1.25rem 0; padding: .8rem; background: #1d1a23; border: 1px solid #453e4e; border-radius: .5rem; }
-.arcade-progress > div { justify-content: space-between; margin-bottom: .6rem; font-size: .8rem; }
-.arcade-progress b { color: #fa8b9a; font-family: var(--font-geist-mono), monospace; }
-.arcade-progress [data-slot="progress-track"] { height: .4rem; background: #3c3544; }
-.arcade-progress [data-slot="progress-indicator"] { background: #fa6377; }
 .arcade-editor-alert { margin: 1rem 1.25rem 0; }
-
-.arcade-success { justify-content: space-between; gap: 1rem; margin: 1rem 1.25rem 0; padding: .85rem 1rem; background: #292033; border: 1px solid #704150; border-radius: .55rem; }
-.arcade-success > div > span { display: flex; align-items: center; gap: .4rem; color: #ffb3be; font-size: .88rem; font-weight: 700; }
-.arcade-success svg { width: 1rem; }
-.arcade-success small { display: block; margin-top: .2rem; color: #b7aebf; font-size: .72rem; }
-.arcade-success audio { max-width: 21rem; height: 2rem; }
 
 .arcade-export { justify-content: space-between; gap: 1.25rem; flex-wrap: wrap; margin-top: 1.2rem; padding: 1.1rem 1.25rem; background: #1d1a23; border-top: 1px solid #453e4e; }
 .arcade-export > label { min-width: 13rem; flex: 1; max-width: 19rem; color: #b7aebf; font-size: .72rem; }
@@ -438,6 +427,13 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-name-field input { min-width: 0; width: 100%; padding: .5rem 0; color: #f7f2e8; background: transparent; border: 0; font-size: .9rem; }
 .arcade-name-field > span { color: #d6cedc; font-size: .85rem; }
 .arcade-export-action { display: flex; align-items: center; gap: .9rem; margin-left: auto; }
+.arcade-export-progress { width: 10.5rem; }
+.arcade-export-progress > div { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: .38rem; color: #b7aebf; font-size: .7rem; }
+.arcade-export-progress b { color: #fa8b9a; font-family: var(--font-geist-mono), monospace; font-size: .68rem; }
+.arcade-export-progress [data-slot="progress-track"] { height: .25rem; background: #3c3544; }
+.arcade-export-progress [data-slot="progress-indicator"] { background: #fa6377; }
+.arcade-export-success { display: flex; align-items: center; gap: .4rem; color: #ffb3be; font-size: .8rem; font-weight: 700; white-space: nowrap; }
+.arcade-export-success svg { width: .95rem; height: .95rem; }
 .arcade-output-summary { display: flex; flex-direction: column; gap: .2rem; color: #f7f2e8; text-align: right; font-family: var(--font-geist-mono), monospace; font-size: .78rem; }
 .arcade-output-summary span:last-child { color: #b7aebf; font-size: .72rem; }
 .arcade-create-button { min-height: 3rem; color: #20131b; background: #fa6377; font-weight: 800; cursor: pointer; transition: background-color .16s ease, box-shadow .16s ease; }
@@ -452,12 +448,11 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
   .arcade-editor-intro { align-items: start; flex-direction: column; }
   .arcade-workspace { grid-template-columns: 1fr; }
   .arcade-media { min-height: 13rem; }
-  .arcade-success { align-items: stretch; flex-direction: column; }
-  .arcade-success audio { max-width: none; width: 100%; }
   .arcade-export { align-items: stretch; flex-direction: column; }
   .arcade-export > label { max-width: none; }
   .arcade-output-summary { text-align: left; }
   .arcade-export-action { align-items: stretch; flex-direction: column; width: 100%; margin-left: 0; }
+  .arcade-export-progress { width: 100%; }
   .arcade-create-button { width: 100%; }
   .arcade-volume-control { align-items: flex-start; flex-direction: column; gap: .8rem; }
   .arcade-volume-title { width: auto; }

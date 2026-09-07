@@ -491,13 +491,13 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            {isBusy && <div className="arcade-progress" aria-live="polite"><div><span>{stage === 'loading' ? 'Preparing audio engine…' : 'Creating your MP3…'}</span><b>{Math.round(progress)}%</b></div><Progress value={progress} /></div>}
             {error && <div className="arcade-alert arcade-editor-alert" role="alert"><CircleAlert /> {error}</div>}
-            {stage === 'done' && outputUrl && <div className="arcade-success"><div><span><Check /> Discord-ready</span><small>{clipDuration.toFixed(2)} sec · {formatBytes(outputSize)} · MP3</small></div><audio controls src={outputUrl}><track kind="captions" srcLang="en" label="Generated sound clip" />Your browser does not support audio playback.</audio></div>}
             <footer className="arcade-export">
               <label htmlFor="output-name"><span>File name</span><div className="arcade-name-field"><input id="output-name" value={outputName} onChange={(event) => setOutputName(safeName(event.target.value))} aria-label="Output file name" /><span>.mp3</span></div></label>
               <div className="arcade-export-action">
-                <div className="arcade-output-summary"><span>{clipDuration.toFixed(2)} sec</span><span>{stage === 'done' ? formatBytes(outputSize) : `${Math.ceil(clipDuration * 16 + 1)} KB`}</span></div>
+                {isBusy && <div className="arcade-export-progress" aria-live="polite"><div><span>{stage === 'loading' ? 'Preparing…' : 'Creating MP3…'}</span><b>{Math.round(progress)}%</b></div><Progress value={progress} /></div>}
+                {stage === 'done' && outputUrl && <span className="arcade-export-success"><Check /> MP3 ready</span>}
+                {!isBusy && <div className="arcade-output-summary"><span>{clipDuration.toFixed(2)} sec</span><span>{stage === 'done' ? formatBytes(outputSize) : `${Math.ceil(clipDuration * 16 + 1)} KB`}</span></div>}
                 {stage === 'done' && outputUrl ? (
                   <Button className="arcade-create-button" render={<a href={outputUrl} download={`${outputName || 'soundboard-clip'}.mp3`} aria-label="Download generated MP3"><span className="sr-only">Download generated MP3</span></a>}><Download /> Download MP3</Button>
                 ) : (
