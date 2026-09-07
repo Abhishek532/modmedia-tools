@@ -439,12 +439,20 @@ export default function Home() {
               <span className="arcade-file-details"><b>{file.name}</b><small>{formatBytes(file.size)} · {formatTime(duration)} · {isAudioFile ? 'MP3 audio' : 'MP4 video'}</small></span>
               <label className="arcade-replace">Replace file<input className="sr-only" type="file" accept="video/mp4,audio/mpeg,.mp4,.mp3" onChange={(event) => { acceptFile(event.target.files?.[0]); event.target.value = ''; }} /></label>
             </div>
-            <div className={`arcade-workspace ${isAudioFile ? 'is-audio' : ''}`}>
+            <div className="arcade-workspace">
               <div className="arcade-media">
                 <video ref={videoRef} src={fileUrl} className={isAudioFile ? 'sr-only' : 'arcade-video'} playsInline preload="metadata" onLoadedMetadata={(event) => { const nextDuration = event.currentTarget.duration; if (!Number.isFinite(nextDuration) || nextDuration < 0.1) { setError('This file has an invalid duration.'); return; } const nextSelection = { start: 0, end: Math.min(MAX_CLIP_SECONDS, nextDuration) }; setDuration(nextDuration); selectionRef.current = nextSelection; setSelection(nextSelection); setPlayhead(0); setShowPlayhead(false); }}>
                   <track kind="captions" srcLang="en" label="User-provided media" />
                 </video>
-                {!isAudioFile && <button type="button" className="arcade-video-play" aria-label={isPlaying ? 'Pause selected clip' : 'Play selected clip'} onClick={togglePreview}>{isPlaying ? <Pause /> : <Play />}</button>}
+                {isAudioFile ? (
+                  <div className="arcade-audio-placeholder">
+                    <Music2 aria-hidden="true" />
+                    <strong>Audio-only file</strong>
+                    <span>No video preview available</span>
+                  </div>
+                ) : (
+                  <button type="button" className="arcade-video-play" aria-label={isPlaying ? 'Pause selected clip' : 'Play selected clip'} onClick={togglePreview}>{isPlaying ? <Pause /> : <Play />}</button>
+                )}
               </div>
               <div className="arcade-timeline">
                 <div className="arcade-timeline-heading"><h2>Choose your moment</h2></div>
