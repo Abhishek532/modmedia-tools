@@ -406,6 +406,7 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-volume-track-wrap { position: relative; display: flex; align-items: center; min-width: 10rem; height: 1rem; flex: 1; }
 .arcade-volume-track-wrap::before { position: absolute; z-index: 2; top: 50%; left: 50%; width: 2px; height: .75rem; content: ''; pointer-events: none; background: #8e8497; border-radius: 2px; transform: translate(-50%, -50%); }
 .arcade-volume-slider { width: 100%; cursor: pointer; }
+.arcade-volume-slider > div { min-height: 2rem; cursor: pointer; }
 .arcade-volume-slider [data-slot="slider-track"] { height: .38rem; overflow: visible; background: linear-gradient(to right, #514a58 0 var(--volume-start), #fa6377 var(--volume-start) var(--volume-end), #514a58 var(--volume-end) 100%); }
 .arcade-volume-slider [data-slot="slider-range"] { background: transparent; }
 .arcade-volume-slider [data-slot="slider-thumb"] { z-index: 3; width: .95rem; height: .95rem; cursor: grab; background: #fa6377; border: 2px solid #ffe4e9; box-shadow: 0 0 0 3px rgba(250, 99, 119, .16); }

@@ -191,10 +191,10 @@ export default function Home() {
   );
 
   const applySelection = (next: { start: number; end: number }) => {
+    // Trimming changes the range, not the paused media position.
+    wavesurferRef.current?.pause();
     selectionRef.current = next;
     setSelection(next);
-    setPlayhead(next.start);
-    setShowPlayhead(false);
     resetOutput();
   };
 
@@ -473,7 +473,7 @@ export default function Home() {
                         min={-6}
                         max={6}
                         step={1}
-                        value={volumeDb}
+                        value={[volumeDb]}
                         onValueChange={(value) => {
                           setVolumeDb(typeof value === 'number' ? value : value[0]);
                           resetOutput();
