@@ -1,6 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
+import Link from 'next/link';
 import WaveSurfer from 'wavesurfer.js';
 import {
   ArrowLeft,
@@ -8,17 +9,17 @@ import {
   CircleAlert,
   Download,
   FileVideo,
-  LockKeyhole,
   Music2,
   Pause,
   Play,
   Scissors,
   UploadCloud,
-  WandSparkles,
+  Volume2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
+import { Slider } from '@/components/ui/slider';
 
 const MAX_FILE_BYTES = 250 * 1024 * 1024;
 const MAX_CLIP_SECONDS = 5;
@@ -65,6 +66,7 @@ export default function Home() {
   const [error, setError] = useState('');
   const [outputUrl, setOutputUrl] = useState('');
   const [outputSize, setOutputSize] = useState(0);
+  const [volumeDb, setVolumeDb] = useState(0);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const waveformRef = useRef<HTMLDivElement>(null);
@@ -72,6 +74,9 @@ export default function Home() {
   const rangeDragRef = useRef<{ offset: number; length: number } | null>(null);
   const wavesurferRef = useRef<WaveSurfer | null>(null);
   const ffmpegRef = useRef<import('@ffmpeg/ffmpeg').FFmpeg | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const mediaSourceRef = useRef<MediaElementAudioSourceNode | null>(null);
+  const gainNodeRef = useRef<GainNode | null>(null);
   const selectionRef = useRef(selection);
   const isAudioFile = file?.name.toLowerCase().endsWith('.mp3') || file?.type === 'audio/mpeg';
 
@@ -97,6 +102,19 @@ export default function Home() {
   useEffect(() => () => {
     if (outputUrl) URL.revokeObjectURL(outputUrl);
   }, [outputUrl]);
+
+  useEffect(() => {
+    const context = audioContextRef.current;
+    const gain = gainNodeRef.current;
+    if (!context || !gain) return;
+    gain.gain.setTargetAtTime(Math.pow(10, volumeDb / 20), context.currentTime, 0.01);
+  }, [volumeDb]);
+
+  useEffect(() => () => {
+    mediaSourceRef.current?.disconnect();
+    gainNodeRef.current?.disconnect();
+    void audioContextRef.current?.close();
+  }, []);
 
   useEffect(() => {
     if (!fileUrl || !duration || !waveformRef.current || !videoRef.current) return;
@@ -224,17 +242,42 @@ export default function Home() {
     applySelection({ start, end: start + drag.length });
   };
 
-  const togglePreview = () => {
+  const preparePreviewAudio = async () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    let context = audioContextRef.current;
+    if (!context) {
+      context = new AudioContext();
+      const source = context.createMediaElementSource(video);
+      const gain = context.createGain();
+      gain.gain.value = Math.pow(10, volumeDb / 20);
+      source.connect(gain).connect(context.destination);
+      audioContextRef.current = context;
+      mediaSourceRef.current = source;
+      gainNodeRef.current = gain;
+    }
+
+    if (context.state === 'suspended') await context.resume();
+  };
+
+  const togglePreview = async () => {
     const wavesurfer = wavesurferRef.current;
     if (!wavesurfer) return;
     if (isPlaying) {
       wavesurfer.pause();
     } else {
+      try {
+        await preparePreviewAudio();
+      } catch {
+        setError('Volume preview is not available in this browser. Try a current version of Chrome, Edge, or Safari.');
+        return;
+      }
       const resumeAt = showPlayhead && playhead >= selection.start && playhead < selection.end ? playhead : selection.start;
       wavesurfer.setTime(resumeAt);
       setPlayhead(resumeAt);
       setShowPlayhead(true);
-      wavesurfer.play(resumeAt, selection.end);
+      await wavesurfer.play(resumeAt, selection.end);
     }
   };
 
@@ -314,6 +357,7 @@ export default function Home() {
         '-b:a',
         '128k',
       ];
+      if (volumeDb !== 0) args.push('-af', `volume=${volumeDb}dB`);
       args.push('-id3v2_version', '3', 'output.mp3');
 
       const exitCode = await ffmpeg.exec(args);
@@ -352,19 +396,24 @@ export default function Home() {
 
   const clipDuration = Math.max(0, selection.end - selection.start);
   const isBusy = stage === 'loading' || stage === 'converting';
+  const volumePercent = ((volumeDb + 12) / 24) * 100;
+  const volumeStyle = {
+    '--volume-start': `${Math.min(50, volumePercent)}%`,
+    '--volume-end': `${Math.max(50, volumePercent)}%`,
+  } as CSSProperties;
 
   return (
     <main className="arcade-app">
       <header className="arcade-header">
-        <a className="arcade-brand" href="/" aria-label="SoundSlice home"><span className="arcade-monogram">SS</span><span className="arcade-brand-copy"><span>SoundSlice</span><small>Soundboard maker</small></span></a>
+        <Link className="arcade-brand" href="/" aria-label="SoundSlice home"><span className="arcade-monogram">SS</span><span className="arcade-brand-copy"><span>SoundSlice</span><small>Soundboard maker</small></span></Link>
         <span className="arcade-private"><span className="arcade-private-dot" aria-hidden="true" /> Local processing</span>
       </header>
       {!file ? (
         <section className="arcade-upload-page">
-          <a className="arcade-back-link" href="/"><ArrowLeft /> All tools</a>
+          <Link className="arcade-back-link" href="/"><ArrowLeft /> All tools</Link>
           <div className="arcade-upload-intro"><h1>Soundboard Maker</h1><p>Drop an MP4 or MP3, trim it to five seconds, and download a Discord-ready sound.</p></div>
           <div className={`arcade-drop-shell ${isDragging ? 'is-dragging' : ''}`} onDragEnter={(event) => { event.preventDefault(); setIsDragging(true); }} onDragLeave={(event) => { event.preventDefault(); if (event.currentTarget === event.target) setIsDragging(false); }} onDragOver={(event) => event.preventDefault()} onDrop={(event) => { event.preventDefault(); setIsDragging(false); acceptFile(event.dataTransfer.files[0]); }}>
-            <label className="arcade-drop-zone">
+            <label className="arcade-drop-zone" aria-label="Choose an MP4 or MP3 file">
               <input className="sr-only" type="file" accept="video/mp4,audio/mpeg,.mp4,.mp3" onChange={(event) => { acceptFile(event.target.files?.[0]); event.target.value = ''; }} />
               <span className="arcade-drop-main"><span className="arcade-drop-message"><span className="arcade-drop-title">{isDragging ? 'Drop it here' : 'Drop an MP4 or MP3'}</span><span className="arcade-drop-copy">Trim the best moment and make it ready for your soundboard.</span></span><span className="arcade-choose-button"><UploadCloud /> Choose a clip</span></span>
             </label>
@@ -373,7 +422,7 @@ export default function Home() {
         </section>
       ) : (
         <section className="arcade-editor-page">
-          <a className="arcade-back-link" href="/"><ArrowLeft /> All tools</a>
+          <Link className="arcade-back-link" href="/"><ArrowLeft /> All tools</Link>
           <div className="arcade-editor-intro">
             <div><p className="arcade-eyebrow">Soundboard clip maker</p><h1>Your next soundboard hit.</h1><p>Find the moment. Keep the reaction.</p></div>
           </div>
@@ -410,6 +459,31 @@ export default function Home() {
                     <label htmlFor="clip-end"><span>End · sec</span><Input id="clip-end" type="number" min={selection.start + 0.1} max={duration} step={0.01} value={selection.end.toFixed(2)} onChange={(event) => updateBoundary('end', event.target.value)} /></label>
                   </div>
                 </div>
+                <div className="arcade-volume-control">
+                  <div className="arcade-volume-title"><Volume2 aria-hidden="true" /><span>Volume</span></div>
+                  <div className="arcade-volume-row">
+                    <span className="arcade-volume-direction">Quieter</span>
+                    <div className="arcade-volume-track-wrap">
+                      <Slider
+                        className="arcade-volume-slider"
+                        min={-12}
+                        max={12}
+                        step={1}
+                        value={volumeDb}
+                        onValueChange={(value) => {
+                          setVolumeDb(typeof value === 'number' ? value : value[0]);
+                          resetOutput();
+                        }}
+                        aria-label={`Volume: ${volumeDb === 0 ? 'Default' : `${volumeDb > 0 ? '+' : ''}${volumeDb} dB`}`}
+                        style={volumeStyle}
+                      />
+                      <div className="arcade-volume-scale" aria-hidden="true">
+                        <span>−6 dB</span><span>−3 dB</span><span>Default</span><span>+3 dB</span><span>+6 dB</span>
+                      </div>
+                    </div>
+                    <span className="arcade-volume-direction">Louder</span>
+                  </div>
+                </div>
               </div>
             </div>
             {isBusy && <div className="arcade-progress" aria-live="polite"><div><span>{stage === 'loading' ? 'Preparing audio engine…' : 'Creating your MP3…'}</span><b>{Math.round(progress)}%</b></div><Progress value={progress} /></div>}
@@ -427,7 +501,6 @@ export default function Home() {
               </div>
             </footer>
           </section>
-          <p className="arcade-local-note"><LockKeyhole /> Your file never leaves this browser</p>
         </section>
       )}
     </main>
