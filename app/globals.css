@@ -355,8 +355,8 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-ruler { display: flex; justify-content: space-between; padding: .55rem 0 1.1rem; color: #b7aebf; font-family: var(--font-geist-mono), monospace; font-size: .72rem; }
 .arcade-timeline-help { margin: .45rem 0 .85rem; color: #b7aebf; font-size: .77rem; line-height: 1.4; }
 .arcade-trim-controls { justify-content: flex-start; gap: 1.1rem; flex-wrap: wrap; }
-.arcade-preview-button { width: 2.75rem; min-width: 2.75rem; height: 2.75rem; padding: 0; color: #fa6377; background: #352731; border: 1px solid #554c61; border-radius: 50%; cursor: pointer; transition: color .16s ease, background-color .16s ease, border-color .16s ease, transform .16s ease; }
-.arcade-preview-button:not(:disabled):hover { color: #ff8b9a; background: #47313e; border-color: #8c5360; transform: translateY(-1px); }
+.arcade-preview-button { width: 2.75rem; min-width: 2.75rem; height: 2.75rem; padding: 0; color: #fa6377; background: #352731; border: 1px solid #554c61; border-radius: 50%; cursor: pointer; transition: color .16s ease, background-color .16s ease, border-color .16s ease; }
+.arcade-preview-button:not(:disabled):hover { color: #ff8b9a; background: #47313e; border-color: #8c5360; }
 .arcade-preview-button svg { width: 1.05rem; height: 1.05rem; }
 .arcade-time-fields { display: flex; align-items: end; gap: 1rem; margin-left: auto; }
 .arcade-time-fields label > span { display: block; color: #b7aebf; font-size: .72rem; }
@@ -384,8 +384,8 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-export-action { display: flex; align-items: center; gap: .9rem; margin-left: auto; }
 .arcade-output-summary { display: flex; flex-direction: column; gap: .2rem; color: #f7f2e8; text-align: right; font-family: var(--font-geist-mono), monospace; font-size: .78rem; }
 .arcade-output-summary span:last-child { color: #b7aebf; font-size: .72rem; }
-.arcade-create-button { min-height: 3rem; color: #20131b; background: #fa6377; font-weight: 800; cursor: pointer; transition: background-color .16s ease, box-shadow .16s ease, transform .16s ease; }
-.arcade-create-button:not(:disabled):hover { background: #ff7c8e; box-shadow: 0 6px 18px rgba(250, 99, 119, .24); transform: translateY(-1px); }
+.arcade-create-button { min-height: 3rem; color: #20131b; background: #fa6377; font-weight: 800; cursor: pointer; transition: background-color .16s ease, box-shadow .16s ease; }
+.arcade-create-button:not(:disabled):hover { background: #ff7c8e; box-shadow: 0 6px 18px rgba(250, 99, 119, .24); }
 .arcade-create-button svg { width: 1rem; }
 .arcade-local-note { justify-content: center; margin: 1.25rem 0 0; }
 
