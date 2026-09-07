@@ -464,7 +464,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="arcade-volume-control">
-                  <div className="arcade-volume-title"><Volume2 aria-hidden="true" /><span>Volume</span></div>
+                  <div className="arcade-volume-title"><Volume2 aria-hidden="true" /><span>Volume level</span></div>
                   <div className="arcade-volume-row">
                     <span className="arcade-volume-direction">Quieter</span>
                     <div className="arcade-volume-track-wrap">
@@ -482,7 +482,7 @@ export default function Home() {
                         style={volumeStyle}
                       />
                       <div className="arcade-volume-scale" aria-hidden="true">
-                        <span>−6</span><span>−4</span><span>−2</span><span>Default</span><span>+2</span><span>+4</span><span>+6</span>
+                        <span>−6 dB</span><span>−4 dB</span><span>−2 dB</span><span className="is-default">0 dB<small>Default</small></span><span>+2 dB</span><span>+4 dB</span><span>+6 dB</span>
                       </div>
                     </div>
                     <span className="arcade-volume-direction">Louder</span>
