@@ -499,7 +499,7 @@ export default function Home() {
                 {stage === 'done' && outputUrl && <span className="arcade-export-success"><Check /> MP3 ready</span>}
                 {!isBusy && <div className="arcade-output-summary"><span>{clipDuration.toFixed(2)} sec</span><span>{stage === 'done' ? formatBytes(outputSize) : `${Math.ceil(clipDuration * 16 + 1)} KB`}</span></div>}
                 {stage === 'done' && outputUrl ? (
-                  <Button className="arcade-create-button" render={<a href={outputUrl} download={`${outputName || 'soundboard-clip'}.mp3`} aria-label="Download generated MP3"><span className="sr-only">Download generated MP3</span></a>}><Download /> Download MP3</Button>
+                  <Button className="arcade-create-button" render={<a href={outputUrl} download={`${outputName || 'soundboard-clip'}.mp3`} aria-label="Download generated MP3" />}><Download /> Download MP3</Button>
                 ) : (
                   <Button className="arcade-create-button" onClick={convert} disabled={!duration || isBusy || clipDuration <= 0 || clipDuration > MAX_CLIP_SECONDS}><Scissors /> {isBusy ? 'Working…' : 'Create MP3'}</Button>
                 )}
