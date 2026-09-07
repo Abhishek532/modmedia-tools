@@ -397,6 +397,7 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-create-button { min-height: 3rem; color: #20131b; background: #fa6377; font-weight: 800; cursor: pointer; transition: background-color .16s ease, box-shadow .16s ease; }
 .arcade-create-button:not(:disabled):hover { background: #ff7c8e; box-shadow: 0 6px 18px rgba(250, 99, 119, .24); }
 .arcade-create-button svg { width: 1rem; }
+.arcade-local-note { display: none; }
 
 @media (max-width: 700px) {
   .arcade-header, .arcade-upload-page, .arcade-editor-page { width: min(100% - 1.25rem, 72rem); }

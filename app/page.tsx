@@ -7,6 +7,7 @@ import {
   CircleAlert,
   Download,
   FileVideo,
+  LockKeyhole,
   Music2,
   Pause,
   Play,
@@ -435,6 +436,7 @@ export default function Home() {
               </div>
             </footer>
           </section>
+          <p className="arcade-local-note"><LockKeyhole /> Your file never leaves this browser</p>
         </section>
       )}
     </main>
