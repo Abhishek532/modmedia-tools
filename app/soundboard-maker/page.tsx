@@ -51,6 +51,14 @@ function safeName(name: string) {
   );
 }
 
+function SoundboardHero() {
+  return (
+    <div className="arcade-editor-intro">
+      <div><h1>Soundboard Maker</h1><p>Trim an MP4 or MP3, adjust its volume, and download a Discord-ready sound.</p></div>
+    </div>
+  );
+}
+
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
   const [fileUrl, setFileUrl] = useState('');
@@ -412,7 +420,7 @@ export default function Home() {
       {!file ? (
         <section className="arcade-upload-page">
           <Link className="arcade-back-link" href="/"><ArrowLeft /> All tools</Link>
-          <div className="arcade-upload-intro"><h1>Soundboard Maker</h1><p>Drop an MP4 or MP3, trim it to five seconds, and download a Discord-ready sound.</p></div>
+          <SoundboardHero />
           <div className={`arcade-drop-shell ${isDragging ? 'is-dragging' : ''}`} onDragEnter={(event) => { event.preventDefault(); setIsDragging(true); }} onDragLeave={(event) => { event.preventDefault(); if (event.currentTarget === event.target) setIsDragging(false); }} onDragOver={(event) => event.preventDefault()} onDrop={(event) => { event.preventDefault(); setIsDragging(false); acceptFile(event.dataTransfer.files[0]); }}>
             <label className="arcade-drop-zone" aria-label="Choose an MP4 or MP3 file">
               <input className="sr-only" type="file" accept="video/mp4,audio/mpeg,.mp4,.mp3" onChange={(event) => { acceptFile(event.target.files?.[0]); event.target.value = ''; }} />
@@ -424,9 +432,7 @@ export default function Home() {
       ) : (
         <section className="arcade-editor-page">
           <Link className="arcade-back-link" href="/"><ArrowLeft /> All tools</Link>
-          <div className="arcade-editor-intro">
-            <div><h1>Soundboard Maker</h1><p>Trim an MP4 or MP3, adjust its volume, and download a Discord-ready sound.</p></div>
-          </div>
+          <SoundboardHero />
           <section className="arcade-editor-shell">
             <div className="arcade-file-row">
               <span className="arcade-file-icon">{isAudioFile ? <Music2 /> : <FileVideo />}</span>
