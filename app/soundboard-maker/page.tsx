@@ -191,10 +191,12 @@ export default function Home() {
   );
 
   const applySelection = (next: { start: number; end: number }) => {
-    // Trimming changes the range, not the paused media position.
+    // Keep the media position and visible playhead at the new trim start.
     wavesurferRef.current?.pause();
     selectionRef.current = next;
     setSelection(next);
+    wavesurferRef.current?.setTime(next.start);
+    setPlayhead(next.start);
     resetOutput();
   };
 
