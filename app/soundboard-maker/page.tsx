@@ -54,7 +54,7 @@ function safeName(name: string) {
 function SoundboardHero() {
   return (
     <div className="arcade-editor-intro">
-      <div><h1>Soundboard Maker</h1><p>Trim an MP4 or MP3, adjust its volume, and download a Discord-ready soundboard clip.</p></div>
+      <div><h1>Soundboard Maker</h1><p>Trim an MP4 or MP3, adjust its volume,<br />and download a Discord-ready soundboard clip.</p></div>
     </div>
   );
 }
