@@ -408,7 +408,6 @@ export default function Home() {
     <main className="arcade-app">
       <header className="arcade-header">
         <Link className="arcade-brand" href="/" aria-label="SoundSlice home"><span className="arcade-monogram">SS</span><span className="arcade-brand-copy"><span>SoundSlice</span><small>Soundboard maker</small></span></Link>
-        <span className="arcade-private"><span className="arcade-private-dot" aria-hidden="true" /> Local processing</span>
       </header>
       {!file ? (
         <section className="arcade-upload-page">

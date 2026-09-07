@@ -148,7 +148,7 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
   border-bottom: 1px solid #34303c;
 }
 
-.arcade-brand, .arcade-private, .arcade-file-row,
+.arcade-brand, .arcade-file-row,
 .arcade-trim-controls, .arcade-export, .arcade-success, .arcade-progress > div {
   display: flex;
   align-items: center;
@@ -182,14 +182,6 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
   letter-spacing: -.08em;
   transition: background-color .16s ease;
 }
-
-.arcade-private {
-  gap: .45rem;
-  color: #b7aebf;
-  font-size: .75rem;
-}
-
-.arcade-private-dot { width: .42rem; height: .42rem; background: #fa6377; border-radius: 50%; box-shadow: 0 0 0 .22rem rgb(250 99 119 / 10%); }
 
 .arcade-upload-page, .arcade-editor-page {
   width: min(100% - 2rem, 72rem);
@@ -455,7 +447,6 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 
 @media (max-width: 700px) {
   .arcade-header, .arcade-upload-page, .arcade-editor-page, .arcade-tools-page { width: min(100% - 1.25rem, 72rem); }
-  .arcade-private { display: none; }
   .arcade-drop-main { align-items: stretch; flex-direction: column; }
   .arcade-choose-button { width: 100%; }
   .arcade-editor-intro { align-items: start; flex-direction: column; }
