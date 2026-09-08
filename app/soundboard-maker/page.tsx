@@ -54,7 +54,7 @@ function safeName(name: string) {
 function SoundboardHero() {
   return (
     <div className="arcade-editor-intro">
-      <div><h1>Soundboard Maker</h1><p>Trim an MP4 or MP3, adjust its volume,<br />and download a Discord-ready soundboard clip.</p></div>
+      <div><h1>Soundboard Editor</h1><p>Trim an MP4 or MP3, adjust its volume,<br />and download a Discord-ready soundboard clip.</p></div>
     </div>
   );
 }
@@ -415,7 +415,7 @@ export default function Home() {
   return (
     <main className="arcade-app">
       <header className="arcade-header">
-        <a className="arcade-brand" href="/" aria-label="SoundSlice home"><span className="arcade-monogram">SS</span><span className="arcade-brand-copy"><span>SoundSlice</span><small>Soundboard maker</small></span></a>
+        <a className="arcade-brand" href="/" aria-label="SoundSlice home"><span className="arcade-monogram">SS</span><span className="arcade-brand-copy">SoundSlice</span></a>
       </header>
       {!file ? (
         <section className="arcade-upload-page">

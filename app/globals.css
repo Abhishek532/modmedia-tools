@@ -167,7 +167,6 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-brand:hover .arcade-monogram { background: #ff7c8e; }
 
 .arcade-brand-copy { display: grid; gap: .08rem; text-align: left; }
-.arcade-brand-copy small { color: #817889; font-size: .7rem; font-weight: 500; letter-spacing: 0; }
 
 .arcade-monogram {
   display: grid;
