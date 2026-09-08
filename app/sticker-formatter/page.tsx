@@ -311,14 +311,16 @@ export default function StickerFormatter() {
             <div className="sticker-workspace">
               <div className="sticker-preview-panel">
                 <div className="sticker-preview-crop">
-                  <canvas ref={canvasRef} className="sticker-preview-canvas" aria-label="Sticker crop preview" onPointerDown={(event) => { event.currentTarget.setPointerCapture(event.pointerId); dragRef.current = { x: event.clientX, y: event.clientY, offsetX: offset.x, offsetY: offset.y }; }} onPointerMove={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) movePreview(event.clientX, event.clientY); }} onPointerUp={(event) => { dragRef.current = null; event.currentTarget.releasePointerCapture(event.pointerId); }} />
+                  <div className="sticker-preview-image-column">
+                    <canvas ref={canvasRef} className="sticker-preview-canvas" aria-label="Sticker crop preview" onPointerDown={(event) => { event.currentTarget.setPointerCapture(event.pointerId); dragRef.current = { x: event.clientX, y: event.clientY, offsetX: offset.x, offsetY: offset.y }; }} onPointerMove={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) movePreview(event.clientX, event.clientY); }} onPointerUp={(event) => { dragRef.current = null; event.currentTarget.releasePointerCapture(event.pointerId); }} />
+                    <p><Move /> Drag the image to reposition it.</p>
+                  </div>
                   <div className="sticker-vertical-zoom">
                     <ZoomIn aria-hidden="true" />
                     <Slider className="sticker-vertical-zoom-slider" orientation="vertical" min={1} max={2.5} step={0.01} value={[zoom]} onValueChange={(value) => { setZoom(typeof value === 'number' ? value : value[0]); resetOutput(); }} aria-label="Sticker zoom" />
                     <b>{Math.round(zoom * 100)}%</b>
                   </div>
                 </div>
-                <p><Move /> Drag the image to reposition it.</p>
               </div>
               <div className="sticker-controls">
                 <div className="sticker-control-heading"><h2>Format your sticker</h2><span><b>320 × 320</b> · 512 KB max</span></div>
