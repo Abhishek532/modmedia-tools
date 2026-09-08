@@ -20,6 +20,8 @@ Detailed UI specifications: [SoundSlice UI/UX design system](soundslice-design-s
 - Legacy `/soundboard-maker` route remains available for old bookmarks, but new links should use `/soundboard-editor`.
 - Canonical project folder: `/Users/abhishek.sharma1/Documents/SoundSlice`.
 - Product and design documentation lives in `/Users/abhishek.sharma1/Documents/SoundSlice/docs`.
+- All future SoundSlice code, documentation, design assets, test fixtures, and durable project-specific outputs must be created or updated within this canonical folder.
+- Do not create another working copy under a dated Codex folder. Temporary build or deployment archives may use system temporary storage, but the canonical source and durable project artifacts remain here.
 - Local Git repository uses branch `main`. No permanent GitHub/GitLab remote is configured; Sites uses a private internal source repository during publishing.
 - The site was owner-private at the last verified deployment. Abhishek intends to share it publicly/with friends later, but that intent is not authorization to change access.
 

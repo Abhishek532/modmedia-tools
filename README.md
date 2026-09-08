@@ -2,6 +2,12 @@
 
 SoundSlice is a growing collection of Discord-oriented media tools for server moderators. The current product includes a client-side Soundboard Editor for trimming MP4 or MP3 files, adjusting volume, and exporting Discord-ready MP3 clips.
 
+## Canonical workspace
+
+All SoundSlice development must be performed and saved in `/Users/abhishek.sharma1/Documents/SoundSlice`.
+
+Keep source code, documentation, design assets, test fixtures, and durable project-specific outputs in this folder. Do not recreate or use the former dated Codex project folder as a working copy. Temporary build or deployment archives may use system temporary storage, but they are not the project source of truth.
+
 ## Project references
 
 - [Product context and decisions](docs/soundslice.md)
@@ -30,4 +36,3 @@ pnpm build
 ```
 
 Live site: https://soundslice-discord.abhisheksharma532.chatgpt.site
-
