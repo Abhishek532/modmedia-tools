@@ -343,12 +343,10 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-timeline { min-width: 0; }
 .arcade-timeline-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
 .arcade-timeline-heading h2 { margin: 0; font-size: 1.27rem; font-weight: 700; }
-.arcade-duration-status { display: flex; align-items: baseline; gap: .42rem; font-family: var(--font-geist-mono), monospace; }
-.arcade-selected-duration { color: #c8c0cf; font-size: .72rem; }
-.arcade-selected-duration b { color: #fa6377; font-size: .88rem; }
-.arcade-duration-status i { color: #83798b; font-size: .78rem; font-style: normal; }
-.arcade-duration-status em { color: #ffe4e9; font-size: .94rem; font-style: normal; font-weight: 700; letter-spacing: .01em; }
-.arcade-duration-status em b { font-size: 1.12rem; }
+.arcade-duration-status { display: flex; align-items: baseline; gap: .38rem; font-family: var(--font-geist-mono), monospace; }
+.arcade-selected-duration { color: #fa6377; font-size: 1rem; font-weight: 700; }
+.arcade-duration-status i { color: #83798b; font-size: .8rem; font-style: normal; }
+.arcade-duration-status em { color: #b7aebf; font-size: .875rem; font-style: normal; font-weight: 500; }
 .arcade-waveform-shell, .arcade-wave-skeleton { margin-top: 1rem; overflow: hidden; background: #19171f; border-radius: .45rem; }
 .arcade-timeline-help + .arcade-waveform-shell,
 .arcade-timeline-help + .arcade-wave-skeleton { margin-top: 0; }
