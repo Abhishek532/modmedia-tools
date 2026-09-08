@@ -439,7 +439,7 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .sticker-preview-canvas { display: block; width: min(100%, 18rem); height: auto; aspect-ratio: 1; cursor: grab; background-color: #27232e; background-image: linear-gradient(45deg, #332e3a 25%, transparent 25%), linear-gradient(-45deg, #332e3a 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #332e3a 75%), linear-gradient(-45deg, transparent 75%, #332e3a 75%); background-position: 0 0, 0 .5rem, .5rem -.5rem, -.5rem 0; background-size: 1rem 1rem; border: 1px solid #554c61; border-radius: .45rem; touch-action: none; image-rendering: auto; }
 .sticker-preview-canvas:active { cursor: grabbing; }
 .sticker-vertical-zoom { display: flex; height: min(18rem, 68vw); align-items: center; flex-direction: column; gap: .55rem; color: #b7aebf; font-size: .68rem; font-weight: 700; }
-.sticker-vertical-zoom > svg { width: 1.2rem; height: 1.2rem; color: #fa6377; }
+.sticker-vertical-zoom > svg { width: 1.6rem; height: 1.6rem; color: #fa6377; }
 .sticker-vertical-zoom > b { color: #fa6377; font-family: var(--font-geist-mono), monospace; font-size: .7rem; }
 .sticker-vertical-zoom-slider { width: 1rem; min-height: 8rem; cursor: pointer; }
 .sticker-vertical-zoom-slider [data-slot="slider-track"] { width: .38rem; background: #514a58; }
