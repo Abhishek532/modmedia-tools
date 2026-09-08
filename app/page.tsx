@@ -12,7 +12,7 @@ export default function Home() {
         <div className="arcade-tool-grid" aria-label="Media tools">
           <a className="arcade-tool-tile" href="/soundboard-editor">
             <span className="arcade-tool-icon"><Music2 /></span>
-            <span className="arcade-tool-copy"><strong>Soundboard Editor</strong><span>Drop an MP4 or MP3, trim it to five seconds, and make it ready for your soundboard.</span></span>
+            <span className="arcade-tool-copy"><strong>Soundboard Editor</strong><span>Drop an MP4 or MP3, trim it, and make it ready for your soundboard.</span></span>
             <ArrowRight className="arcade-tool-arrow" />
           </a>
         </div>
