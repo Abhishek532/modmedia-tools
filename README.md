@@ -1,6 +1,6 @@
 # SoundSlice
 
-SoundSlice is a growing collection of Discord-oriented media tools for server moderators. The current product includes a client-side Soundboard Editor for trimming MP4 or MP3 files, adjusting volume, and exporting Discord-ready MP3 clips.
+SoundSlice is a growing collection of Discord-oriented media tools for server moderators. The current product includes a client-side Soundboard Editor and Sticker Formatter for producing Discord-ready media files.
 
 ## Canonical workspace
 
@@ -18,6 +18,7 @@ Keep source code, documentation, design assets, test fixtures, and durable proje
 - Homepage: `app/page.tsx`
 - Soundboard Editor implementation: `app/soundboard-maker/page.tsx`
 - Primary route entry: `app/soundboard-editor/page.tsx`
+- Sticker Formatter: `app/sticker-formatter/page.tsx`
 - Shared styling: `app/globals.css`
 - Site metadata: `app/layout.tsx`
 - Hosting configuration: `.openai/hosting.json`

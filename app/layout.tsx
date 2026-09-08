@@ -14,17 +14,17 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://soundslice-discord.warm-okapi-4710.chatgpt.site'),
-  title: 'SoundSlice — Discord Soundboard Editor',
-  description: 'Trim MP4 videos or MP3 audio into Discord-ready soundboard clips without uploading your files.',
+  title: 'SoundSlice — Discord Media Tools',
+  description: 'Format soundboard clips, stickers, and other Discord-ready media directly in your browser.',
   openGraph: {
-    title: 'SoundSlice — Discord Soundboard Editor',
-    description: 'Cut the moment. Keep the chaos. Create Discord-ready MP3 clips locally in your browser.',
+    title: 'SoundSlice — Discord Media Tools',
+    description: 'Create Discord-ready soundboard clips, stickers, and more directly in your browser.',
     images: [{ url: '/og.png', width: 1200, height: 630, alt: 'SoundSlice audio waveform' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SoundSlice — Discord Soundboard Editor',
-    description: 'Cut the moment. Keep the chaos. Create Discord-ready MP3 clips locally in your browser.',
+    title: 'SoundSlice — Discord Media Tools',
+    description: 'Create Discord-ready soundboard clips, stickers, and more directly in your browser.',
     images: ['/og.png'],
   },
 };

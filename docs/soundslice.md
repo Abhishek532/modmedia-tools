@@ -18,6 +18,7 @@ Detailed UI specifications: [SoundSlice UI/UX design system](soundslice-design-s
 - Live site: https://soundslice-discord.abhisheksharma532.chatgpt.site
 - Primary editor route: `/soundboard-editor`.
 - Legacy `/soundboard-maker` route remains available for old bookmarks, but new links should use `/soundboard-editor`.
+- Sticker Formatter route: `/sticker-formatter`.
 - Canonical project folder: `/Users/abhishek.sharma1/Documents/SoundSlice`.
 - Product and design documentation lives in `/Users/abhishek.sharma1/Documents/SoundSlice/docs`.
 - All future SoundSlice code, documentation, design assets, test fixtures, and durable project-specific outputs must be created or updated within this canonical folder.
@@ -52,6 +53,16 @@ Detailed UI specifications: [SoundSlice UI/UX design system](soundslice-design-s
 - Tool tiles must be fully clickable, have clear hover/focus behavior, and navigate directly to the tool.
 - Current tile name: `Soundboard Editor`.
 - Current tile description: `Drop an MP4 or MP3, trim it, and make it ready for your soundboard.` Do not reintroduce `to five seconds` in this tile description.
+- Current tile name: `Sticker Formatter`.
+- Current tile description: `Crop, resize, and compress a sticker for Discord in a few clicks.`
+
+## Sticker Formatter
+
+- The Sticker Formatter uses the shared SoundSlice header, `All tools` link, centered hero, upload card, editor shell, and compact export footer.
+- Accepted source files: JPG, PNG, GIF, and APNG. Its upload copy reflects Discord’s sticker requirements: exactly 320 × 320 pixels and no larger than 512 KB.
+- Users can choose `Fill` to crop edges and fill the square, or `Fit` to keep the full image in frame; they can also zoom, drag to reposition, and reset the crop.
+- Static sources export as PNG where possible, falling back to JPG if needed to meet the 512 KB limit. Animated GIF/APNG sources export as optimized animated GIFs, preserving animation when they can fit the same limit.
+- The editor shows live 320 × 320 crop preview, source dimensions/type, concise processing state, recovery-oriented file-size errors, and a clearly labeled download control after completion.
 
 ## Soundboard Editor hero
 

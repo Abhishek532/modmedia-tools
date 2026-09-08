@@ -1,5 +1,5 @@
 /* oxlint-disable next/no-html-link-for-pages */
-import { ArrowRight, Music2 } from 'lucide-react';
+import { ArrowRight, Music2, Sticker } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -13,6 +13,11 @@ export default function Home() {
           <a className="arcade-tool-tile" href="/soundboard-editor">
             <span className="arcade-tool-icon"><Music2 /></span>
             <span className="arcade-tool-copy"><strong>Soundboard Editor</strong><span>Drop an MP4 or MP3, trim it, and make it ready for your soundboard.</span></span>
+            <ArrowRight className="arcade-tool-arrow" />
+          </a>
+          <a className="arcade-tool-tile" href="/sticker-formatter">
+            <span className="arcade-tool-icon"><Sticker /></span>
+            <span className="arcade-tool-copy"><strong>Sticker Formatter</strong><span>Crop, resize, and compress a sticker for Discord in a few clicks.</span></span>
             <ArrowRight className="arcade-tool-arrow" />
           </a>
         </div>
