@@ -440,7 +440,6 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .sticker-preview-canvas:active { cursor: grabbing; }
 .sticker-vertical-zoom { display: flex; height: min(18rem, 68vw); align-items: center; flex-direction: column; gap: .55rem; color: #b7aebf; font-size: .68rem; font-weight: 700; }
 .sticker-vertical-zoom > svg { width: 1.6rem; height: 1.6rem; color: #fa6377; }
-.sticker-vertical-zoom > b { color: #fa6377; font-family: var(--font-geist-mono), monospace; font-size: .7rem; }
 .sticker-vertical-zoom-slider { width: 1rem; height: auto; min-height: 0; flex: 1; cursor: pointer; }
 .sticker-vertical-zoom-slider [data-slot="slider-track"] { width: .38rem; background: #514a58; }
 .sticker-vertical-zoom-slider [data-slot="slider-range"] { background: #fa6377; }

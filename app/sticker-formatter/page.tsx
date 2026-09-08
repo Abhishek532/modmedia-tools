@@ -2,7 +2,7 @@
 /* oxlint-disable next/no-html-link-for-pages */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ArrowLeft, Check, CircleAlert, Download, ImageIcon, Maximize2, Minimize2, Move, RotateCcw, UploadCloud, ZoomIn } from 'lucide-react';
+import { ArrowLeft, Check, CircleAlert, Download, ImageIcon, Maximize2, Minimize2, Move, RotateCcw, UploadCloud, ZoomIn, ZoomOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Slider } from '@/components/ui/slider';
@@ -318,7 +318,7 @@ export default function StickerFormatter() {
                   <div className="sticker-vertical-zoom">
                     <ZoomIn aria-hidden="true" />
                     <Slider className="sticker-vertical-zoom-slider" orientation="vertical" min={1} max={2.5} step={0.01} value={[zoom]} onValueChange={(value) => { setZoom(typeof value === 'number' ? value : value[0]); resetOutput(); }} aria-label="Sticker zoom" />
-                    <b>{Math.round(zoom * 100)}%</b>
+                    <ZoomOut aria-hidden="true" />
                   </div>
                 </div>
               </div>
