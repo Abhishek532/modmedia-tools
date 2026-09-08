@@ -2,7 +2,7 @@
 /* oxlint-disable next/no-html-link-for-pages */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ArrowLeft, Check, CircleAlert, Download, ImageIcon, Move, RotateCcw, SlidersHorizontal, UploadCloud } from 'lucide-react';
+import { ArrowLeft, Check, CircleAlert, Download, ImageIcon, Move, RotateCcw, UploadCloud } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Slider } from '@/components/ui/slider';
@@ -311,7 +311,14 @@ export default function StickerFormatter() {
             <div className="sticker-workspace">
               <div className="sticker-preview-panel">
                 <div className="sticker-preview-heading"><span>Preview</span><small>320 × 320</small></div>
-                <canvas ref={canvasRef} className="sticker-preview-canvas" aria-label="Sticker crop preview" onPointerDown={(event) => { event.currentTarget.setPointerCapture(event.pointerId); dragRef.current = { x: event.clientX, y: event.clientY, offsetX: offset.x, offsetY: offset.y }; }} onPointerMove={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) movePreview(event.clientX, event.clientY); }} onPointerUp={(event) => { dragRef.current = null; event.currentTarget.releasePointerCapture(event.pointerId); }} />
+                <div className="sticker-preview-crop">
+                  <canvas ref={canvasRef} className="sticker-preview-canvas" aria-label="Sticker crop preview" onPointerDown={(event) => { event.currentTarget.setPointerCapture(event.pointerId); dragRef.current = { x: event.clientX, y: event.clientY, offsetX: offset.x, offsetY: offset.y }; }} onPointerMove={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) movePreview(event.clientX, event.clientY); }} onPointerUp={(event) => { dragRef.current = null; event.currentTarget.releasePointerCapture(event.pointerId); }} />
+                  <div className="sticker-vertical-zoom">
+                    <span>Zoom</span>
+                    <Slider className="sticker-vertical-zoom-slider" orientation="vertical" min={1} max={2.5} step={0.01} value={[zoom]} onValueChange={(value) => { setZoom(typeof value === 'number' ? value : value[0]); resetOutput(); }} aria-label="Sticker zoom" />
+                    <b>{Math.round(zoom * 100)}%</b>
+                  </div>
+                </div>
                 <p><Move /> Drag the image to reposition it.</p>
               </div>
               <div className="sticker-controls">
@@ -321,12 +328,7 @@ export default function StickerFormatter() {
                   <button type="button" className={fitMode === 'fill' ? 'is-active' : ''} onClick={() => updateFitMode('fill')} aria-pressed={fitMode === 'fill'}><span>Fill</span><small>Crops edges to fill the sticker</small></button>
                   <button type="button" className={fitMode === 'fit' ? 'is-active' : ''} onClick={() => updateFitMode('fit')} aria-pressed={fitMode === 'fit'}><span>Fit</span><small>Keeps the full image in frame</small></button>
                 </div>
-                <div className="sticker-zoom-control">
-                  <div><label htmlFor="sticker-zoom"><SlidersHorizontal /> Zoom</label><span>{Math.round(zoom * 100)}%</span></div>
-                  <Slider id="sticker-zoom" min={1} max={2.5} step={0.01} value={[zoom]} onValueChange={(value) => { setZoom(typeof value === 'number' ? value : value[0]); resetOutput(); }} aria-label="Sticker zoom" />
-                </div>
                 <Button className="sticker-reset-button" type="button" onClick={resetPosition}><RotateCcw /> Reset crop</Button>
-                <div className="sticker-format-note"><span>{animated ? 'Animated source' : 'Static source'}</span><p>{animated ? 'Your animation will export as an optimized GIF.' : 'Your image will export as PNG, or JPG when needed to fit the size limit.'}</p></div>
               </div>
             </div>
             {error && <div className="arcade-alert arcade-editor-alert" role="alert"><CircleAlert /> {error}</div>}
