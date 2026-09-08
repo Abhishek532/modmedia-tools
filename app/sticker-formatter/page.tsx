@@ -2,7 +2,7 @@
 /* oxlint-disable next/no-html-link-for-pages */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ArrowLeft, Check, CircleAlert, Download, ImageIcon, Move, RotateCcw, UploadCloud } from 'lucide-react';
+import { ArrowLeft, Check, CircleAlert, Download, ImageIcon, Maximize2, Minimize2, Move, RotateCcw, UploadCloud, ZoomIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Slider } from '@/components/ui/slider';
@@ -310,11 +310,10 @@ export default function StickerFormatter() {
             </div>
             <div className="sticker-workspace">
               <div className="sticker-preview-panel">
-                <div className="sticker-preview-heading"><span>Preview</span><small>320 × 320</small></div>
                 <div className="sticker-preview-crop">
                   <canvas ref={canvasRef} className="sticker-preview-canvas" aria-label="Sticker crop preview" onPointerDown={(event) => { event.currentTarget.setPointerCapture(event.pointerId); dragRef.current = { x: event.clientX, y: event.clientY, offsetX: offset.x, offsetY: offset.y }; }} onPointerMove={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) movePreview(event.clientX, event.clientY); }} onPointerUp={(event) => { dragRef.current = null; event.currentTarget.releasePointerCapture(event.pointerId); }} />
                   <div className="sticker-vertical-zoom">
-                    <span>Zoom</span>
+                    <ZoomIn aria-hidden="true" />
                     <Slider className="sticker-vertical-zoom-slider" orientation="vertical" min={1} max={2.5} step={0.01} value={[zoom]} onValueChange={(value) => { setZoom(typeof value === 'number' ? value : value[0]); resetOutput(); }} aria-label="Sticker zoom" />
                     <b>{Math.round(zoom * 100)}%</b>
                   </div>
@@ -325,8 +324,8 @@ export default function StickerFormatter() {
                 <div className="sticker-control-heading"><h2>Format your sticker</h2><span><b>320 × 320</b> · 512 KB max</span></div>
                 <p className="sticker-control-help">Choose how the image fits, then zoom or reposition it before export.</p>
                 <div className="sticker-fit-options" aria-label="Sticker fit mode">
-                  <button type="button" className={fitMode === 'fill' ? 'is-active' : ''} onClick={() => updateFitMode('fill')} aria-pressed={fitMode === 'fill'}><span>Fill</span><small>Crops edges to fill the sticker</small></button>
-                  <button type="button" className={fitMode === 'fit' ? 'is-active' : ''} onClick={() => updateFitMode('fit')} aria-pressed={fitMode === 'fit'}><span>Fit</span><small>Keeps the full image in frame</small></button>
+                  <button type="button" className={fitMode === 'fill' ? 'is-active' : ''} onClick={() => updateFitMode('fill')} aria-pressed={fitMode === 'fill'}><Maximize2 aria-hidden="true" /><span>Fill</span><small>Crops edges to fill the sticker</small></button>
+                  <button type="button" className={fitMode === 'fit' ? 'is-active' : ''} onClick={() => updateFitMode('fit')} aria-pressed={fitMode === 'fit'}><Minimize2 aria-hidden="true" /><span>Fit</span><small>Keeps the full image in frame</small></button>
                 </div>
                 <Button className="sticker-reset-button" type="button" onClick={resetPosition}><RotateCcw /> Reset crop</Button>
               </div>
