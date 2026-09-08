@@ -474,8 +474,8 @@ export default function Home() {
                 <div className="arcade-trim-controls">
                   <div className="arcade-duration-status"><span className="arcade-selected-duration"><b>{clipDuration.toFixed(2)}</b> sec selected</span><i>/</i><em><b>5.00</b> sec max</em></div>
                   <div className="arcade-time-fields">
-                    <label htmlFor="clip-start"><span>Start · sec</span><Input id="clip-start" type="number" min={0} max={Math.max(0, selection.end - 0.1)} step={0.01} value={selection.start.toFixed(2)} onChange={(event) => updateBoundary('start', event.target.value)} /></label>
-                    <label htmlFor="clip-end"><span>End · sec</span><Input id="clip-end" type="number" min={selection.start + 0.1} max={duration} step={0.01} value={selection.end.toFixed(2)} onChange={(event) => updateBoundary('end', event.target.value)} /></label>
+                    <label htmlFor="clip-start"><span>Start</span><Input id="clip-start" type="number" min={0} max={Math.max(0, selection.end - 0.1)} step={0.1} value={selection.start.toFixed(2)} onChange={(event) => updateBoundary('start', event.target.value)} /></label>
+                    <label htmlFor="clip-end"><span>End</span><Input id="clip-end" type="number" min={selection.start + 0.1} max={duration} step={0.1} value={selection.end.toFixed(2)} onChange={(event) => updateBoundary('end', event.target.value)} /></label>
                   </div>
                 </div>
                 <div className="arcade-volume-control">
