@@ -62,7 +62,9 @@ Detailed UI specifications: [SoundSlice UI/UX design system](soundslice-design-s
 - Accepted source files: JPG, PNG, GIF, and APNG. Its upload copy reflects Discord’s sticker requirements: exactly 320 × 320 pixels and no larger than 512 KB.
 - Users can choose `Fill` to crop edges and fill the square, or `Fit` to keep the full image in frame; they can also zoom, drag to reposition, and reset the crop.
 - Static sources export as PNG where possible, falling back to JPG if needed to meet the 512 KB limit. Animated GIF/APNG sources export as optimized animated GIFs, preserving animation when they can fit the same limit.
-- The editor shows live 320 × 320 crop preview, source dimensions/type, concise processing state, recovery-oriented file-size errors, and a clearly labeled download control after completion.
+- GIF and APNG sources play automatically in the live 320 × 320 crop preview. Static sources use the rendered canvas preview.
+- Detect APNG animation from its `acTL` chunk as well as a `.apng` filename, because valid APNG files commonly use the regular `.png` extension.
+- The editor shows source dimensions/type, concise processing state, recovery-oriented file-size errors, and a clearly labeled download control after completion.
 - Keep the editable filename field in the Sticker Formatter export footer, matching the Soundboard Editor pattern. Its extension reflects the planned or completed output format.
 
 ## Soundboard Editor hero

@@ -1,5 +1,5 @@
 'use client';
-/* oxlint-disable next/no-html-link-for-pages */
+/* oxlint-disable next/no-html-link-for-pages, next/no-img-element */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowLeft, Check, CircleAlert, Download, ImageIcon, Maximize2, Minimize2, Move, RotateCcw, UploadCloud, ZoomIn, ZoomOut } from 'lucide-react';
@@ -36,8 +36,19 @@ function safeName(name: string) {
   );
 }
 
-function isAnimatedFile(file: File) {
-  return /\.(gif|apng)$/i.test(file.name) || file.type === 'image/gif';
+async function hasAnimatedFrames(file: File) {
+  if (/\.gif$/i.test(file.name) || file.type === 'image/gif' || /\.apng$/i.test(file.name)) return true;
+  if (!/\.png$/i.test(file.name) && file.type !== 'image/png') return false;
+
+  const bytes = new Uint8Array(await file.slice(0, 64 * 1024).arrayBuffer());
+  for (let index = 8; index + 12 <= bytes.length;) {
+    const length = (bytes[index] << 24) | (bytes[index + 1] << 16) | (bytes[index + 2] << 8) | bytes[index + 3];
+    const type = String.fromCharCode(bytes[index + 4], bytes[index + 5], bytes[index + 6], bytes[index + 7]);
+    if (type === 'acTL') return true;
+    if (length < 0 || index + length + 12 > bytes.length) break;
+    index += length + 12;
+  }
+  return false;
 }
 
 function StickerHero() {
@@ -55,6 +66,7 @@ export default function StickerFormatter() {
   const [file, setFile] = useState<File | null>(null);
   const [fileUrl, setFileUrl] = useState('');
   const [imageDetails, setImageDetails] = useState<ImageDetails | null>(null);
+  const [isAnimated, setIsAnimated] = useState(false);
   const [fitMode, setFitMode] = useState<FitMode>('fill');
   const [zoom, setZoom] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
@@ -132,7 +144,7 @@ export default function StickerFormatter() {
     drawPreview();
   }, [drawPreview]);
 
-  const acceptFile = useCallback((nextFile?: File) => {
+  const acceptFile = useCallback(async (nextFile?: File) => {
     if (!nextFile) return;
     const accepted = /\.(jpe?g|png|gif|apng)$/i.test(nextFile.name) || ['image/jpeg', 'image/png', 'image/gif'].includes(nextFile.type);
     if (!accepted) {
@@ -141,6 +153,7 @@ export default function StickerFormatter() {
     }
 
     resetOutput();
+    const animatedSource = await hasAnimatedFrames(nextFile);
     const url = URL.createObjectURL(nextFile);
     const image = new Image();
     image.onload = () => {
@@ -155,6 +168,7 @@ export default function StickerFormatter() {
       });
       setFile(nextFile);
       setImageDetails({ width: image.naturalWidth, height: image.naturalHeight, image });
+      setIsAnimated(animatedSource);
       setFitMode('fill');
       setZoom(1);
       setOffset({ x: 0, y: 0 });
@@ -235,7 +249,7 @@ export default function StickerFormatter() {
     const { ffmpeg, fetchFile } = await loadFfmpeg();
     const transform = getTransform();
     if (!transform) throw new Error('The sticker crop is not ready yet.');
-    const sourceExtension = file.name.toLowerCase().endsWith('.apng') ? 'apng' : 'gif';
+    const sourceExtension = file.name.toLowerCase().endsWith('.apng') ? 'apng' : file.name.toLowerCase().endsWith('.gif') ? 'gif' : 'png';
     const inputName = `input.${sourceExtension}`;
     const outputName = 'sticker.gif';
     await ffmpeg.writeFile(inputName, await fetchFile(file));
@@ -263,7 +277,7 @@ export default function StickerFormatter() {
     try {
       setStage('formatting');
       setProgress(42);
-      const result = isAnimatedFile(file) ? await buildAnimatedSticker() : await buildStaticSticker();
+      const result = isAnimated ? await buildAnimatedSticker() : await buildStaticSticker();
       setProgress(94);
       setOutputUrl(URL.createObjectURL(result.blob));
       setOutputSize(result.blob.size);
@@ -277,9 +291,16 @@ export default function StickerFormatter() {
     }
   };
 
-  const animated = file ? isAnimatedFile(file) : false;
+  const animated = isAnimated;
   const busy = stage === 'loading' || stage === 'formatting';
   const downloadExtension = stage === 'done' ? outputExtension : animated ? 'gif' : 'png';
+  const previewTransform = getTransform();
+  const livePreviewStyle = previewTransform ? {
+    width: `${(previewTransform.width / STICKER_SIZE) * 100}%`,
+    height: `${(previewTransform.height / STICKER_SIZE) * 100}%`,
+    left: `${(previewTransform.x / STICKER_SIZE) * 100}%`,
+    top: `${(previewTransform.y / STICKER_SIZE) * 100}%`,
+  } : undefined;
 
   return (
     <main className="arcade-app">
@@ -290,9 +311,9 @@ export default function StickerFormatter() {
         <section className="arcade-upload-page sticker-upload-page">
           <a className="arcade-back-link" href="/"><ArrowLeft /> All tools</a>
           <StickerHero />
-          <div className={`arcade-drop-shell ${isDragging ? 'is-dragging' : ''}`} onDragEnter={(event) => { event.preventDefault(); setIsDragging(true); }} onDragLeave={(event) => { event.preventDefault(); if (event.currentTarget === event.target) setIsDragging(false); }} onDragOver={(event) => event.preventDefault()} onDrop={(event) => { event.preventDefault(); setIsDragging(false); acceptFile(event.dataTransfer.files[0]); }}>
+          <div className={`arcade-drop-shell ${isDragging ? 'is-dragging' : ''}`} onDragEnter={(event) => { event.preventDefault(); setIsDragging(true); }} onDragLeave={(event) => { event.preventDefault(); if (event.currentTarget === event.target) setIsDragging(false); }} onDragOver={(event) => event.preventDefault()} onDrop={(event) => { event.preventDefault(); setIsDragging(false); void acceptFile(event.dataTransfer.files[0]); }}>
             <label className="arcade-drop-zone" aria-label="Choose a sticker image">
-              <input className="sr-only" type="file" accept={ACCEPTED_TYPES} onChange={(event) => { acceptFile(event.target.files?.[0]); event.target.value = ''; }} />
+              <input className="sr-only" type="file" accept={ACCEPTED_TYPES} onChange={(event) => { void acceptFile(event.target.files?.[0]); event.target.value = ''; }} />
               <span className="arcade-drop-main"><span className="arcade-drop-message"><span className="arcade-drop-title">{isDragging ? 'Drop it here' : 'Drop a JPG, PNG, GIF, or APNG'}</span><span className="arcade-drop-copy">Crop it, fit it to 320 × 320, and keep it under Discord’s 512 KB limit.</span></span><span className="arcade-choose-button"><UploadCloud /> Choose an image</span></span>
             </label>
           </div>
@@ -306,13 +327,17 @@ export default function StickerFormatter() {
             <div className="arcade-file-row">
               <span className="arcade-file-icon"><ImageIcon /></span>
               <span className="arcade-file-details"><b>{file.name}</b><small>{formatBytes(file.size)} · {imageDetails?.width ?? 0} × {imageDetails?.height ?? 0} · {animated ? 'Animated source' : 'Static image'}</small></span>
-              <label className="arcade-replace">Replace file<input className="sr-only" type="file" accept={ACCEPTED_TYPES} onChange={(event) => { acceptFile(event.target.files?.[0]); event.target.value = ''; }} /></label>
+              <label className="arcade-replace">Replace file<input className="sr-only" type="file" accept={ACCEPTED_TYPES} onChange={(event) => { void acceptFile(event.target.files?.[0]); event.target.value = ''; }} /></label>
             </div>
             <div className="sticker-workspace">
               <div className="sticker-preview-panel">
                 <div className="sticker-preview-crop">
                   <div className="sticker-preview-image-column">
-                    <canvas ref={canvasRef} className="sticker-preview-canvas" aria-label="Sticker crop preview" onPointerDown={(event) => { event.currentTarget.setPointerCapture(event.pointerId); dragRef.current = { x: event.clientX, y: event.clientY, offsetX: offset.x, offsetY: offset.y }; }} onPointerMove={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) movePreview(event.clientX, event.clientY); }} onPointerUp={(event) => { dragRef.current = null; event.currentTarget.releasePointerCapture(event.pointerId); }} />
+                    {animated ? (
+                      <div className="sticker-live-preview" aria-label="Animated sticker crop preview" onPointerDown={(event) => { event.currentTarget.setPointerCapture(event.pointerId); dragRef.current = { x: event.clientX, y: event.clientY, offsetX: offset.x, offsetY: offset.y }; }} onPointerMove={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) movePreview(event.clientX, event.clientY); }} onPointerUp={(event) => { dragRef.current = null; event.currentTarget.releasePointerCapture(event.pointerId); }}><img src={fileUrl} alt="" style={livePreviewStyle} /></div>
+                    ) : (
+                      <canvas ref={canvasRef} className="sticker-preview-canvas" aria-label="Sticker crop preview" onPointerDown={(event) => { event.currentTarget.setPointerCapture(event.pointerId); dragRef.current = { x: event.clientX, y: event.clientY, offsetX: offset.x, offsetY: offset.y }; }} onPointerMove={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) movePreview(event.clientX, event.clientY); }} onPointerUp={(event) => { dragRef.current = null; event.currentTarget.releasePointerCapture(event.pointerId); }} />
+                    )}
                     <p><Move /> Drag the image to reposition it.</p>
                   </div>
                   <div className="sticker-vertical-zoom">
