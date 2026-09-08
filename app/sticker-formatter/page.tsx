@@ -65,6 +65,7 @@ export default function StickerFormatter() {
   const [outputUrl, setOutputUrl] = useState('');
   const [outputSize, setOutputSize] = useState(0);
   const [outputExtension, setOutputExtension] = useState<'png' | 'jpg' | 'gif'>('png');
+  const [outputName, setOutputName] = useState('discord-sticker');
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const dragRef = useRef<{ x: number; y: number; offsetX: number; offsetY: number } | null>(null);
@@ -157,6 +158,7 @@ export default function StickerFormatter() {
       setFitMode('fill');
       setZoom(1);
       setOffset({ x: 0, y: 0 });
+      setOutputName(safeName(nextFile.name));
     };
     image.onerror = () => {
       URL.revokeObjectURL(url);
@@ -277,6 +279,7 @@ export default function StickerFormatter() {
 
   const animated = file ? isAnimatedFile(file) : false;
   const busy = stage === 'loading' || stage === 'formatting';
+  const downloadExtension = stage === 'done' ? outputExtension : animated ? 'gif' : 'png';
 
   return (
     <main className="arcade-app">
@@ -328,13 +331,13 @@ export default function StickerFormatter() {
             </div>
             {error && <div className="arcade-alert arcade-editor-alert" role="alert"><CircleAlert /> {error}</div>}
             <footer className="arcade-export sticker-export">
-              <div className="sticker-export-note"><span>Output</span><b>{animated ? 'Animated GIF sticker' : 'Static sticker'}</b></div>
+              <label htmlFor="sticker-output-name"><span>File name</span><div className="arcade-name-field"><input id="sticker-output-name" value={outputName} onChange={(event) => setOutputName(safeName(event.target.value))} aria-label="Sticker file name" /><span>.{downloadExtension}</span></div></label>
               <div className="arcade-export-action">
                 {busy && <div className="arcade-export-progress" aria-live="polite"><div><span>{stage === 'loading' ? 'Preparing…' : 'Formatting sticker…'}</span><b>{Math.round(progress)}%</b></div><Progress value={progress} /></div>}
                 {stage === 'done' && outputUrl && <span className="arcade-export-success"><Check /> Sticker ready</span>}
                 {stage === 'done' && <div className="arcade-output-summary"><span>320 × 320</span><span>{formatBytes(outputSize)}</span></div>}
                 {stage === 'done' && outputUrl ? (
-                  <Button className="arcade-create-button" render={<a href={outputUrl} download={`${safeName(file.name)}-sticker.${outputExtension}`} aria-label="Download formatted sticker" />}><Download /> Download sticker</Button>
+                  <Button className="arcade-create-button" render={<a href={outputUrl} download={`${outputName || 'discord-sticker'}.${outputExtension}`} aria-label="Download formatted sticker" />}><Download /> Download sticker</Button>
                 ) : (
                   <Button className="arcade-create-button" onClick={createSticker} disabled={busy}><ImageIcon /> {busy ? 'Working…' : 'Create sticker'}</Button>
                 )}

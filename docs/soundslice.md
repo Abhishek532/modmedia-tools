@@ -63,6 +63,7 @@ Detailed UI specifications: [SoundSlice UI/UX design system](soundslice-design-s
 - Users can choose `Fill` to crop edges and fill the square, or `Fit` to keep the full image in frame; they can also zoom, drag to reposition, and reset the crop.
 - Static sources export as PNG where possible, falling back to JPG if needed to meet the 512 KB limit. Animated GIF/APNG sources export as optimized animated GIFs, preserving animation when they can fit the same limit.
 - The editor shows live 320 × 320 crop preview, source dimensions/type, concise processing state, recovery-oriented file-size errors, and a clearly labeled download control after completion.
+- Keep the editable filename field in the Sticker Formatter export footer, matching the Soundboard Editor pattern. Its extension reflects the planned or completed output format.
 
 ## Soundboard Editor hero
 
