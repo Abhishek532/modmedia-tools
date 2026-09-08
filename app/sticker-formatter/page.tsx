@@ -97,15 +97,21 @@ export default function StickerFormatter() {
     const scale = baseScale * zoom;
     const width = imageDetails.width * scale;
     const height = imageDetails.height * scale;
-    const minX = Math.min(0, STICKER_SIZE - width);
-    const minY = Math.min(0, STICKER_SIZE - height);
+    const centeredX = (STICKER_SIZE - width) / 2;
+    const centeredY = (STICKER_SIZE - height) / 2;
+    const minOffsetX = width > STICKER_SIZE ? STICKER_SIZE - width - centeredX : 0;
+    const maxOffsetX = width > STICKER_SIZE ? -centeredX : 0;
+    const minOffsetY = height > STICKER_SIZE ? STICKER_SIZE - height - centeredY : 0;
+    const maxOffsetY = height > STICKER_SIZE ? -centeredY : 0;
     return {
       width,
       height,
-      x: Math.max(minX, Math.min(0, (STICKER_SIZE - width) / 2 + offset.x)),
-      y: Math.max(minY, Math.min(0, (STICKER_SIZE - height) / 2 + offset.y)),
-      minX,
-      minY,
+      x: centeredX + Math.max(minOffsetX, Math.min(maxOffsetX, offset.x)),
+      y: centeredY + Math.max(minOffsetY, Math.min(maxOffsetY, offset.y)),
+      minOffsetX,
+      maxOffsetX,
+      minOffsetY,
+      maxOffsetY,
     };
   }, [fitMode, imageDetails, offset, zoom]);
 
@@ -179,11 +185,9 @@ export default function StickerFormatter() {
     if (!transform) return;
     const nextX = drag.offsetX + clientX - drag.x;
     const nextY = drag.offsetY + clientY - drag.y;
-    const centeredX = (STICKER_SIZE - transform.width) / 2;
-    const centeredY = (STICKER_SIZE - transform.height) / 2;
     setOffset({
-      x: Math.max(transform.minX - centeredX, Math.min(-centeredX, nextX)),
-      y: Math.max(transform.minY - centeredY, Math.min(-centeredY, nextY)),
+      x: Math.max(transform.minOffsetX, Math.min(transform.maxOffsetX, nextX)),
+      y: Math.max(transform.minOffsetY, Math.min(transform.maxOffsetY, nextY)),
     });
   };
 
