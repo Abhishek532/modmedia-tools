@@ -1,17 +1,17 @@
-# SoundSlice
+# ModMedia Tools
 
-SoundSlice is a growing collection of Discord-oriented media tools for server moderators. The current product includes a client-side Soundboard Editor and Sticker Formatter for producing Discord-ready media files.
+ModMedia Tools is a growing collection of Discord-oriented media tools for server moderators. The current product includes a client-side Soundboard Editor and Sticker Formatter for producing Discord-ready media files.
 
 ## Canonical workspace
 
-All SoundSlice development must be performed and saved in `/Users/abhishek.sharma1/Documents/SoundSlice`.
+All ModMedia Tools development must be performed and saved in the legacy project folder `/Users/abhishek.sharma1/Documents/SoundSlice`.
 
 Keep source code, documentation, design assets, test fixtures, and durable project-specific outputs in this folder. Do not recreate or use the former dated Codex project folder as a working copy. Temporary build or deployment archives may use system temporary storage, but they are not the project source of truth.
 
 ## Project references
 
-- [Product context and decisions](docs/soundslice.md)
-- [UI/UX design system](docs/soundslice-design-system.md)
+- [Product context and decisions](docs/modmedia-tools.md)
+- [UI/UX design system](docs/modmedia-tools-design-system.md)
 
 ## Application
 
@@ -36,4 +36,4 @@ pnpm lint
 pnpm build
 ```
 
-Live site: https://soundslice-discord.abhisheksharma532.chatgpt.site
+Live site (legacy URL): https://soundslice-discord.abhisheksharma532.chatgpt.site

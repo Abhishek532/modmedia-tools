@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <main className="arcade-app">
       <header className="arcade-header">
-        <a className="arcade-brand" href="/" aria-label="SoundSlice home"><span className="arcade-monogram">SS</span><span className="arcade-brand-copy">SoundSlice</span></a>
+        <a className="arcade-brand" href="/" aria-label="ModMedia Tools home"><span className="arcade-monogram">MM</span><span className="arcade-brand-copy"><span>ModMedia</span><span className="arcade-brand-suffix">Tools</span></span></a>
       </header>
       <section className="arcade-tools-page">
         <div className="arcade-upload-intro"><h1>Every tool you need for Discord-ready media, in one place.</h1><p>Fast, free tools for soundboards, stickers, emojis, icons, GIFs, and video. Trim, resize, compress, convert, and export in just a few clicks.</p></div>

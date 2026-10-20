@@ -1,14 +1,14 @@
-# SoundSlice UI/UX design system
+# ModMedia Tools UI/UX design system
 
-Last updated: 2026-09-08.
-Status: canonical guidance for the current SoundSlice site and future media tools. Exact implemented values were verified against `app/globals.css`; product and UX intent comes from Abhishek's explicit feedback from 2026-09-05 through 2026-09-08.
+Last updated: 2026-10-20.
+Status: canonical guidance for the current ModMedia Tools site and future media tools. Exact implemented values were verified against `app/globals.css`; product and UX intent comes from Abhishek's explicit feedback from 2026-09-05 through 2026-10-20.
 
-Related product decisions: [SoundSlice — Discord media tools](soundslice.md).
+Related product decisions: [ModMedia Tools — Discord media tools](modmedia-tools.md).
 
 ## 1. Experience principles
 
 1. **Focused, not sparse.** Keep screens visually calm while retaining the labels and short guidance needed to understand unfamiliar media operations.
-2. **Discord-oriented, not Discord-branded.** Use language and workflows familiar to server moderators without implying that SoundSlice is an official Discord product.
+2. **Discord-oriented, not Discord-branded.** Use language and workflows familiar to server moderators without implying that ModMedia Tools is an official Discord product.
 3. **One obvious primary task.** Each tool page should emphasize its working surface and primary export action rather than behave like a marketing page.
 4. **Consistent state geometry.** Uploading, loading, editing, and success states must not unexpectedly move shared page elements or change the overall layout without a functional reason.
 5. **Progressive disclosure.** Show essential controls by default. Avoid expert audio/media options unless users clearly need them.
@@ -149,8 +149,8 @@ Avoid adding margins to compensate for state-dependent layout. Shared elements s
 
 ### Header brand
 
-- `SS` monogram: `2.1rem` square, coral background, compact radius, dark text, Geist Mono.
-- Brand name: 16px, 700 weight.
+- `MM` monogram: `2.1rem` square, coral background, compact radius, dark text, Geist Mono.
+- `ModMedia` name: 16px, 700 weight. `Tools` sits on the same baseline at `0.72em`, 650 weight, in secondary text color.
 - Entire brand is one link to the homepage with a pointer cursor and visible focus state.
 - No per-tool subtitle beneath the brand name.
 
@@ -320,7 +320,7 @@ Do not animate layout position on hover. Transition colors, borders, opacity, an
 
 Future sticker, emoji, icon, GIF, or video tools should reuse this page structure where it fits:
 
-1. Shared SoundSlice header with no changing subtitle.
+1. Shared ModMedia Tools header with no changing subtitle.
 2. Explicit `All tools` navigation.
 3. Centered tool name and one-sentence outcome description.
 4. Stable upload state using the primary card style.
@@ -332,7 +332,7 @@ Do not force waveform, time, volume, or five-second constraints onto tools that 
 
 ## 14. Design QA checklist
 
-Before publishing a new or changed SoundSlice workflow, verify:
+Before publishing a new or changed ModMedia Tools workflow, verify:
 
 - Uses only approved palette roles; no accidental yellow/neon/unrelated accents.
 - Shared header, page width, hero alignment, and spacing match existing tools.

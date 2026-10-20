@@ -166,7 +166,21 @@ body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
 .arcade-brand:hover { color: #ffb3be; }
 .arcade-brand:hover .arcade-monogram { background: #ff7c8e; }
 
-.arcade-brand-copy { display: grid; gap: .08rem; text-align: left; }
+.arcade-brand-copy {
+  display: flex;
+  align-items: baseline;
+  gap: .28rem;
+  text-align: left;
+}
+
+.arcade-brand-suffix {
+  color: #b7aebf;
+  font-size: .72em;
+  font-weight: 650;
+  letter-spacing: -.01em;
+}
+
+.arcade-brand:hover .arcade-brand-suffix { color: #ffb3be; }
 
 .arcade-monogram {
   display: grid;

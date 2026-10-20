@@ -1,27 +1,27 @@
-# SoundSlice — Discord media tools
+# ModMedia Tools — Discord media tools
 
-Last updated: 2026-09-08.
-Source: Abhishek's explicit decisions and feedback during the SoundSlice design and implementation conversation, 2026-09-05 through 2026-09-08. Implementation details were verified in the local project during that work.
+Last updated: 2026-10-20.
+Source: Abhishek's explicit decisions and feedback during the ModMedia Tools design and implementation conversations, 2026-09-05 through 2026-10-20. Implementation details were verified in the local project during that work.
 
-Detailed UI specifications: [SoundSlice UI/UX design system](soundslice-design-system.md).
+Detailed UI specifications: [ModMedia Tools UI/UX design system](modmedia-tools-design-system.md).
 
 ## Product direction
 
-- SoundSlice is intended to grow into an all-in-one destination for Discord-oriented media tools used by server moderators.
+- ModMedia Tools is intended to grow into an all-in-one destination for Discord-oriented media tools used by server moderators.
 - Planned categories include soundboards, stickers, emojis, icons, GIFs, video, and other media workflows. Do not treat the current soundboard tool as the site's final scope.
-- The current product name, `SoundSlice`, and `SS` monogram are temporary enough that naming and logo work remains open. Do not rename or redesign the brand without Abhishek's approval.
+- The approved product name is `ModMedia Tools`, with an `MM` monogram and a smaller `Tools` suffix in the header wordmark. This replaces the former brand name and monogram as of 2026-10-20.
 - Avoid implying official Discord ownership or affiliation. `Discord-ready` is approved descriptive wording.
 - Homepage information architecture takes inspiration from iLovePDF: one clear, broad hero followed by clickable tool tiles that open focused workflows.
 
 ## Current locations and state
 
-- Live site: https://soundslice-discord.abhisheksharma532.chatgpt.site
+- Live site (legacy URL retained): https://soundslice-discord.abhisheksharma532.chatgpt.site
 - Primary editor route: `/soundboard-editor`.
 - Legacy `/soundboard-maker` route remains available for old bookmarks, but new links should use `/soundboard-editor`.
 - Sticker Formatter route: `/sticker-formatter`.
-- Canonical project folder: `/Users/abhishek.sharma1/Documents/SoundSlice`.
+- Canonical project folder: `/Users/abhishek.sharma1/Documents/SoundSlice` (legacy technical path retained after the rebrand).
 - Product and design documentation lives in `/Users/abhishek.sharma1/Documents/SoundSlice/docs`.
-- All future SoundSlice code, documentation, design assets, test fixtures, and durable project-specific outputs must be created or updated within this canonical folder.
+- All future ModMedia Tools code, documentation, design assets, test fixtures, and durable project-specific outputs must be created or updated within this canonical folder.
 - Do not create another working copy under a dated Codex folder. Temporary build or deployment archives may use system temporary storage, but the canonical source and durable project artifacts remain here.
 - Local Git repository uses branch `main`. No permanent GitHub/GitLab remote is configured; Sites uses a private internal source repository during publishing.
 - The site was owner-private at the last verified deployment. Abhishek intends to share it publicly/with friends later, but that intent is not authorization to change access.
@@ -38,9 +38,9 @@ Detailed UI specifications: [SoundSlice UI/UX design system](soundslice-design-s
 
 ## Shared header and navigation
 
-- Header brand contains the `SS` monogram and `SoundSlice` name.
+- Header brand contains the `MM` monogram and the `ModMedia Tools` wordmark, with `Tools` rendered smaller.
 - The brand is clickable and returns to the homepage.
-- Do not show a changing tool/category subtitle beneath `SoundSlice`; this was intentionally removed.
+- Do not show a changing tool/category subtitle beneath `ModMedia Tools`; this was intentionally removed.
 - Focused tool pages retain a subtle `All tools` back link. It is useful even though the logo also returns home because its destination is explicit.
 - If navigation grows, the back link may evolve into a compact breadcrumb such as `All tools / Soundboard Editor`.
 
@@ -58,7 +58,7 @@ Detailed UI specifications: [SoundSlice UI/UX design system](soundslice-design-s
 
 ## Sticker Formatter
 
-- The Sticker Formatter uses the shared SoundSlice header, `All tools` link, centered hero, upload card, editor shell, and compact export footer.
+- The Sticker Formatter uses the shared ModMedia Tools header, `All tools` link, centered hero, upload card, editor shell, and compact export footer.
 - Accepted source files: JPG, PNG, GIF, and APNG. Its upload copy reflects Discord’s sticker requirements: exactly 320 × 320 pixels and no larger than 512 KB.
 - Users can choose `Fill` to crop edges and fill the square, or `Fit` to keep the full image in frame; they can also zoom, drag to reposition, and reset the crop.
 - Static sources export as PNG where possible, falling back to JPG if needed to meet the 512 KB limit. Animated GIF/APNG sources export as optimized animated GIFs, preserving animation when they can fit the same limit.
@@ -163,7 +163,6 @@ Do not restore these without a new request:
 
 ## Deferred decisions
 
-- Final site name and logo remain undecided.
 - Public/shared hosting access has not been authorized yet.
 - Future tools and their exact priority remain unspecified.
 - The dedicated `All tools` back link is currently preferred; revisit only when navigation grows enough to justify breadcrumbs or a fuller header.

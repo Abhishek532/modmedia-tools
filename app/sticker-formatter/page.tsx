@@ -305,7 +305,7 @@ export default function StickerFormatter() {
   return (
     <main className="arcade-app">
       <header className="arcade-header">
-        <a className="arcade-brand" href="/" aria-label="SoundSlice home"><span className="arcade-monogram">SS</span><span className="arcade-brand-copy">SoundSlice</span></a>
+        <a className="arcade-brand" href="/" aria-label="ModMedia Tools home"><span className="arcade-monogram">MM</span><span className="arcade-brand-copy"><span>ModMedia</span><span className="arcade-brand-suffix">Tools</span></span></a>
       </header>
       {!file ? (
         <section className="arcade-upload-page sticker-upload-page">
