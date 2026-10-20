@@ -70,13 +70,15 @@ test('sticker success properties contain only format and aggregate output size',
   );
 });
 
-test('analytics payload removes automatic URLs, referrers, and identifying context', () => {
+test('analytics payload removes navigation and unapproved custom context', () => {
   assert.deepEqual(
     sanitizeAnalyticsProperties('sticker_created', {
       $token: 'phc_test',
       distinct_id: 'anonymous-id',
       $lib: 'web',
       $lib_version: '1.0.0',
+      $session_id: 'session-id',
+      $viewport_width: 1280,
       $session_entry_url: 'https://modmedia.example/sticker-formatter',
       $session_entry_referrer: '$direct',
       $current_url: 'https://modmedia.example/sticker-formatter',
@@ -91,6 +93,8 @@ test('analytics payload removes automatic URLs, referrers, and identifying conte
       distinct_id: 'anonymous-id',
       $lib: 'web',
       $lib_version: '1.0.0',
+      $session_id: 'session-id',
+      $viewport_width: 1280,
       output_format: 'png',
       output_size_bytes: 12345,
     },
