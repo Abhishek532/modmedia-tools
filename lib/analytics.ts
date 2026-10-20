@@ -1,4 +1,5 @@
 import {
+  sanitizeAnalyticsProperties,
   shouldEnableAnalytics,
   soundboardExportProperties,
   stickerExportProperties,
@@ -51,15 +52,13 @@ function getAnalyticsClient() {
           respect_dnt: true,
           before_send: (event) => {
             if (!event) return event;
-            const properties: Record<string, unknown> = {
-              ...event.properties,
-              $geoip_disable: true,
+            return {
+              ...event,
+              properties: sanitizeAnalyticsProperties(
+                event.event,
+                event.properties,
+              ),
             };
-            delete properties.$current_url;
-            delete properties.$host;
-            delete properties.$referrer;
-            delete properties.$referring_domain;
-            return { ...event, properties };
           },
         }),
       )

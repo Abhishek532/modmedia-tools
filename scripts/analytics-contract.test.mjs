@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  sanitizeAnalyticsProperties,
   shouldEnableAnalytics,
   soundboardExportProperties,
   stickerExportProperties,
@@ -65,6 +66,33 @@ test('sticker success properties contain only format and aggregate output size',
     {
       output_format: 'gif',
       output_size_bytes: 8193,
+    },
+  );
+});
+
+test('analytics payload removes automatic URLs, referrers, and identifying context', () => {
+  assert.deepEqual(
+    sanitizeAnalyticsProperties('sticker_created', {
+      $token: 'phc_test',
+      distinct_id: 'anonymous-id',
+      $lib: 'web',
+      $lib_version: '1.0.0',
+      $session_entry_url: 'https://modmedia.example/sticker-formatter',
+      $session_entry_referrer: '$direct',
+      $current_url: 'https://modmedia.example/sticker-formatter',
+      $referrer: 'https://example.com',
+      filename: 'private.png',
+      output_format: 'png',
+      output_size_bytes: 12345,
+    }),
+    {
+      $geoip_disable: true,
+      $token: 'phc_test',
+      distinct_id: 'anonymous-id',
+      $lib: 'web',
+      $lib_version: '1.0.0',
+      output_format: 'png',
+      output_size_bytes: 12345,
     },
   );
 });
