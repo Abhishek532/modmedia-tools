@@ -49,6 +49,7 @@
 }
 
 body { font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; }
+.arcade-privacy-note { width: min(100% - 2rem, 72rem); margin: 0 auto; padding: 0 0 1.5rem; color: #8f8698; text-align: center; font-size: .72rem; line-height: 1.5; }
 
 :root {
   --background: #16151b;

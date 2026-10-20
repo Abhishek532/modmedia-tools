@@ -33,7 +33,21 @@ Validate changes with:
 
 ```sh
 pnpm lint
+pnpm test:analytics
 pnpm build
 ```
+
+## Analytics
+
+Production analytics uses PostHog EU and is intentionally narrow: anonymous page views plus successful Soundboard Editor and Sticker Formatter exports. It uses memory-only persistence (no analytics cookies), creates no person profiles, disables autocapture, session replay, heatmaps, performance and exception capture, and opts every event out of GeoIP enrichment. Localhost, loopback, `.local`, development, unconfigured, and test builds do not send events.
+
+Copy `.env.example` to `.env.local` for local configuration, and set the same public browser variables in the production environment:
+
+```sh
+NEXT_PUBLIC_POSTHOG_KEY=phc_your_project_key
+NEXT_PUBLIC_POSTHOG_HOST=https://eu.i.posthog.com
+```
+
+The exact event contract is documented in [docs/modmedia-tools.md](docs/modmedia-tools.md#privacy-conscious-analytics).
 
 Live site (legacy URL): https://soundslice-discord.abhisheksharma532.chatgpt.site

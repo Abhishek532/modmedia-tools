@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
+import { AnalyticsPageView } from '@/components/analytics-page-view';
 import './globals.css';
 
 const geistSans = Geist({
@@ -43,7 +44,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <AnalyticsPageView />
         {children}
+        <footer className="arcade-privacy-note">
+          Files stay on your device. Anonymous, cookie-free analytics count page views and successful exports only—never filenames or media.
+        </footer>
       </body>
     </html>
   );

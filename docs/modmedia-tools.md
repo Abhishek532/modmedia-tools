@@ -36,6 +36,17 @@ Detailed UI specifications: [ModMedia Tools UI/UX design system](modmedia-tools-
 - Use the coral accent for important actions and selected/current values. Supporting copy and limits should remain muted gray.
 - Avoid jumping/translation hover animations. Use pointer cursors and restrained color, border, or shadow hover feedback on interactive elements.
 
+## Privacy-conscious analytics
+
+- PostHog EU is the analytics provider. The browser project key is a public, write-only value supplied through `NEXT_PUBLIC_POSTHOG_KEY`; the ingest host is supplied through `NEXT_PUBLIC_POSTHOG_HOST` and should be `https://eu.i.posthog.com`.
+- Analytics is disabled unless the app is a configured production build on a public hostname. Development, tests, localhost, loopback addresses, and `.local` hosts are excluded to prevent internal noise.
+- Persistence is memory-only, so analytics creates no cookies or local-storage identifier. Person profiles, autocapture, page-leave capture, session replay, surveys, heatmaps, web-vitals/performance capture, exception capture, campaign/referrer capture, and feature flags are disabled. Do Not Track is respected.
+- Every event carries `$geoip_disable: true`; URL, host, and referrer properties are stripped before sending. Uploaded media stays in the browser and analytics never receives media contents, filenames, source URLs, or failure details.
+- `$pageview` is sent manually with `$pathname` only.
+- `soundboard_mp3_created` is sent only after a successful output is created. Approved properties: `source_type` (`mp3` or `mp4`), `output_size_bytes`, and `output_duration_seconds`.
+- `sticker_created` is sent only after a successful output is created. Approved properties: `output_format` (`png`, `jpg`, or `gif`) and `output_size_bytes`.
+- Analytics calls are non-blocking and failures do not interrupt the editing or export workflow. Do not add new events or properties without a deliberate privacy review.
+
 ## Shared header and navigation
 
 - Header brand contains the `MM` monogram and the `ModMedia Tools` wordmark, with `Tools` rendered smaller.

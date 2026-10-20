@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import { Slider } from '@/components/ui/slider';
+import { trackSoundboardExport } from '@/lib/analytics';
 
 const MAX_FILE_BYTES = 250 * 1024 * 1024;
 const MAX_CLIP_SECONDS = 5;
@@ -385,6 +386,11 @@ export default function Home() {
       setOutputSize(blob.size);
       setProgress(100);
       setStage('done');
+      trackSoundboardExport({
+        sourceType: isAudioFile ? 'mp3' : 'mp4',
+        outputSizeBytes: blob.size,
+        outputDurationSeconds: clipDuration,
+      });
 
       await Promise.allSettled([
         ffmpeg.deleteFile(inputName),

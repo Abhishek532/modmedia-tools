@@ -6,6 +6,7 @@ import { ArrowLeft, Check, CircleAlert, Download, ImageIcon, Maximize2, Minimize
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Slider } from '@/components/ui/slider';
+import { trackStickerExport } from '@/lib/analytics';
 
 const STICKER_SIZE = 320;
 const MAX_OUTPUT_BYTES = 512 * 1024;
@@ -284,6 +285,10 @@ export default function StickerFormatter() {
       setOutputExtension(result.extension);
       setProgress(100);
       setStage('done');
+      trackStickerExport({
+        outputFormat: result.extension,
+        outputSizeBytes: result.blob.size,
+      });
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : 'Sticker formatting failed. Try another image.');
       setStage('error');
