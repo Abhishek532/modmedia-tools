@@ -1,4 +1,5 @@
 import {
+  analyticsCaptureOptions,
   sanitizeAnalyticsProperties,
   shouldEnableAnalytics,
   soundboardExportProperties,
@@ -50,6 +51,11 @@ function getAnalyticsClient() {
           save_campaign_params: false,
           save_referrer: false,
           respect_dnt: true,
+          on_request_error: (response) => {
+            console.warn(
+              `[ModMedia analytics] Delivery failed with status ${response.statusCode}.`,
+            );
+          },
           before_send: (event) => {
             if (!event) return event;
             return {
@@ -74,7 +80,11 @@ function capture(
 ) {
   void getAnalyticsClient()
     .then((client) => {
-      client?.capture(eventName, properties);
+      client?.capture(
+        eventName,
+        properties,
+        analyticsCaptureOptions(eventName),
+      );
     })
     .catch(() => undefined);
 }

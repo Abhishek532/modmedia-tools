@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  analyticsCaptureOptions,
   sanitizeAnalyticsProperties,
   shouldEnableAnalytics,
   soundboardExportProperties,
@@ -99,4 +100,14 @@ test('analytics payload removes navigation and unapproved custom context', () =>
       output_size_bytes: 12345,
     },
   );
+});
+
+test('successful exports bypass the browser batch queue', () => {
+  assert.deepEqual(analyticsCaptureOptions('soundboard_mp3_created'), {
+    send_instantly: true,
+  });
+  assert.deepEqual(analyticsCaptureOptions('sticker_created'), {
+    send_instantly: true,
+  });
+  assert.equal(analyticsCaptureOptions('$pageview'), undefined);
 });
