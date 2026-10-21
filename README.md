@@ -2,12 +2,6 @@
 
 ModMedia Tools is a growing collection of Discord-oriented media tools for server moderators. The current product includes a client-side Soundboard Editor and Sticker Formatter for producing Discord-ready media files.
 
-## Canonical workspace
-
-All ModMedia Tools development must be performed and saved in the legacy project folder `/Users/abhishek.sharma1/Documents/SoundSlice`.
-
-Keep source code, documentation, design assets, test fixtures, and durable project-specific outputs in this folder. Do not recreate or use the former dated Codex project folder as a working copy. Temporary build or deployment archives may use system temporary storage, but they are not the project source of truth.
-
 ## Project references
 
 - [Product context and decisions](docs/modmedia-tools.md)
@@ -49,5 +43,3 @@ NEXT_PUBLIC_POSTHOG_HOST=https://eu.i.posthog.com
 ```
 
 The exact event contract is documented in [docs/modmedia-tools.md](docs/modmedia-tools.md#privacy-conscious-analytics).
-
-Live site (legacy URL): https://soundslice-discord.abhisheksharma532.chatgpt.site
